@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LernApp – Close-up Unit 7: Law and Order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f3ee;
+  --bg2: #eceae4;
+  --card: #ffffff;
+  --card-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --card-shadow-hover: 0 8px 32px rgba(0,0,0,0.13);
+  --text: #2c2a26;
+  --text2: #6b6760;
+  --text3: #9e9b95;
+  --border: #dedad3;
+  --accent: #4a7c59;
+  --accent2: #3d6b4a;
+  --green: #4a7c59;
+  --green-bg: #eaf4ed;
+  --red: #c0392b;
+  --red-bg: #fdecea;
+  --blue: #2c6fad;
+  --blue-bg: #e8f1fb;
+  --amber: #c87941;
+  --amber-bg: #fdf3e7;
+  --purple: #7c5cbf;
+  --purple-bg: #f0eaf9;
+  --sidebar-w: 240px;
+  --topbar-h: 56px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font-head: 'Lora', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+[data-theme="dark"] {
+  --bg: #1a1917;
+  --bg2: #222120;
+  --card: #2a2927;
+  --card-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --card-shadow-hover: 0 8px 32px rgba(0,0,0,0.4);
+  --text: #e8e5de;
+  --text2: #a09d96;
+  --text3: #6b6860;
+  --border: #3a3835;
+  --green-bg: #1a2e20;
+  --red-bg: #2e1a1a;
+  --blue-bg: #1a2233;
+  --amber-bg: #2e2010;
+  --purple-bg: #20182e;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+
+/* LAYOUT */
+.app-shell{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-w);background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;transition:width .3s,transform .3s;overflow:hidden}
+.sidebar.collapsed{width:0}
+.sidebar-inner{width:var(--sidebar-w);display:flex;flex-direction:column;height:100%;overflow-y:auto;overflow-x:hidden}
+.sidebar-logo{padding:20px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.sidebar-logo .logo-text{font-family:var(--font-head);font-size:1.1rem;color:var(--accent);font-weight:700}
+.sidebar-logo .logo-sub{font-size:.72rem;color:var(--text3);margin-top:2px}
+.sidebar-section{padding:8px 0}
+.sidebar-section-label{font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);padding:6px 16px 4px}
+.sidebar-nav{list-style:none}
+.sidebar-nav li a{display:flex;align-items:center;gap:10px;padding:8px 16px;font-size:.85rem;color:var(--text2);text-decoration:none;border-radius:var(--radius-sm);margin:1px 8px;transition:background .15s,color .15s;cursor:pointer;white-space:nowrap}
+.sidebar-nav li a:hover,.sidebar-nav li a.active{background:var(--green-bg);color:var(--accent)}
+.sidebar-nav li a .nav-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.sidebar-collapse-btn{position:fixed;top:50%;left:var(--sidebar-w);transform:translateY(-50%);z-index:300;background:var(--accent);color:#fff;border:none;cursor:pointer;width:22px;height:48px;border-radius:0 24px 24px 0;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:left .3s,background .2s;box-shadow:2px 2px 8px rgba(0,0,0,.2)}
+.sidebar-collapse-btn:hover{background:var(--accent2)}
+.sidebar.collapsed ~ .sidebar-collapse-btn{left:0}
+.main-area{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;transition:margin-left .3s;min-width:0}
+.sidebar.collapsed ~ .main-area{margin-left:0}
+.topbar{height:var(--topbar-h);background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100}
+.topbar-breadcrumb{font-size:.82rem;color:var(--text2);flex:1}
+.topbar-breadcrumb span{color:var(--text3)}
+.topbar-breadcrumb strong{color:var(--text);font-weight:600}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.hub-btn{background:var(--accent);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:.78rem;font-family:var(--font-body);font-weight:600;cursor:pointer;text-decoration:none;transition:background .2s}
+.hub-btn:hover{background:var(--accent2)}
+.dark-toggle{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.78rem;cursor:pointer;color:var(--text2);font-family:var(--font-body);transition:background .2s}
+.dark-toggle:hover{background:var(--border)}
+.page-content{flex:1;padding:32px 28px;max-width:1100px}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+
+/* LANDING */
+.landing-hero{margin-bottom:32px}
+.landing-hero h1{font-family:var(--font-head);font-size:2.2rem;color:var(--text);line-height:1.2}
+.landing-hero p{color:var(--text2);margin-top:8px;font-size:.95rem}
+.stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:36px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--card-shadow)}
+.stat-card .stat-num{font-family:var(--font-head);font-size:1.8rem;font-weight:700;color:var(--accent)}
+.stat-card .stat-label{font-size:.72rem;color:var(--text3);margin-top:2px}
+.mode-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:36px}
+.mode-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:box-shadow .2s,transform .2s;box-shadow:var(--card-shadow)}
+.mode-card:hover{box-shadow:var(--card-shadow-hover);transform:translateY(-3px)}
+.mode-card .mode-emoji{font-size:2rem;margin-bottom:8px}
+.mode-card .mode-title{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text)}
+.mode-card .mode-desc{font-size:.78rem;color:var(--text2);margin-top:4px;line-height:1.5}
+.quick-jump{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--card-shadow)}
+.quick-jump h3{font-family:var(--font-head);font-size:1rem;margin-bottom:12px;color:var(--text)}
+.quick-jump-row{display:flex;flex-wrap:wrap;gap:8px}
+.qj-btn{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.78rem;cursor:pointer;color:var(--text2);font-family:var(--font-body);transition:background .2s,color .2s}
+.qj-btn:hover{background:var(--green-bg);color:var(--accent);border-color:var(--accent)}
+
+/* CRASH COURSE */
+.crash-container{max-width:580px;margin:0 auto}
+.crash-progress-dots{display:flex;justify-content:center;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.crash-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background .3s,transform .2s;cursor:pointer}
+.crash-dot.current{background:var(--accent);transform:scale(1.3)}
+.crash-dot.done{background:var(--green)}
+.crash-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;box-shadow:var(--card-shadow);min-height:340px;display:flex;flex-direction:column;animation:fadeSlide .3s ease}
+@keyframes fadeSlide{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.crash-card .card-topic{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:4px}
+.crash-card .card-emoji{font-size:2.5rem;margin-bottom:8px}
+.crash-card .card-title{font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:16px}
+.crash-card ul{list-style:none;padding:0}
+.crash-card ul li{padding:7px 0;border-bottom:1px solid var(--border);font-size:.9rem;color:var(--text2);line-height:1.5}
+.crash-card ul li:last-child{border-bottom:none}
+.crash-card ul li::before{content:"→ ";color:var(--accent);font-weight:600}
+.crash-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.crash-nav-btn{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 20px;cursor:pointer;font-family:var(--font-body);font-size:.88rem;color:var(--text2);transition:background .2s,color .2s}
+.crash-nav-btn:hover:not(:disabled){background:var(--green-bg);color:var(--accent);border-color:var(--accent)}
+.crash-nav-btn:disabled{opacity:.3;cursor:default}
+.crash-counter{font-size:.8rem;color:var(--text3);font-family:var(--font-mono)}
+.crash-done{text-align:center;padding:40px}
+.crash-done h2{font-family:var(--font-head);font-size:1.8rem;margin-bottom:8px}
+.crash-done p{color:var(--text2);margin-bottom:24px}
+.crash-done-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--radius-sm);font-family:var(--font-body);font-size:.88rem;font-weight:600;cursor:pointer;border:none;transition:background .2s,transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2)}
+.btn-secondary{background:var(--bg2);color:var(--text2);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--border)}
+.btn-sm{padding:6px 14px;font-size:.78rem}
+
+/* SUMMARY PAGES */
+.summary-section{margin-bottom:24px}
+.summary-section-title{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.topic-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--card-shadow);margin-bottom:10px;overflow:hidden}
+.topic-card-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}
+.topic-card-header:hover{background:var(--bg2)}
+.topic-card-title{flex:1;font-weight:600;font-size:.92rem}
+.topic-card-check{width:22px;height:22px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;cursor:pointer;transition:background .2s,border-color .2s;flex-shrink:0}
+.topic-card-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.topic-card-toggle{color:var(--text3);font-size:.8rem;transition:transform .3s;flex-shrink:0}
+.topic-card.open .topic-card-toggle{transform:rotate(180deg)}
+.topic-card-body{display:none;padding:0 18px 18px}
+.topic-card.open .topic-card-body{display:block}
+.progress-bar-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px}
+.progress-bar-wrap .pb-label{font-size:.8rem;color:var(--text2);margin-bottom:8px}
+.progress-bar-track{background:var(--border);border-radius:99px;height:8px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+.pb-pct{font-size:.78rem;color:var(--text3);margin-top:4px;text-align:right;font-family:var(--font-mono)}
+.body-text{font-size:.88rem;color:var(--text2);line-height:1.7}
+.body-text h4{font-family:var(--font-head);color:var(--text);margin:12px 0 6px;font-size:.95rem}
+.body-text ul{padding-left:18px;margin:8px 0}
+.body-text ul li{margin-bottom:4px}
+.body-text strong{color:var(--text);font-weight:600}
+.body-text .example{background:var(--bg2);border-left:3px solid var(--accent);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:8px 12px;margin:8px 0;font-style:italic;font-size:.85rem}
+.table-wrap{overflow-x:auto;margin:10px 0}
+table{width:100%;border-collapse:collapse;font-size:.83rem}
+th{background:var(--blue);color:#fff;padding:8px 12px;text-align:left}
+td{padding:8px 12px;border-bottom:1px solid var(--border)}
+tr:nth-child(even) td{background:var(--bg2)}
+.info-box{border-radius:var(--radius-sm);padding:12px 14px;margin:10px 0;font-size:.85rem;line-height:1.6}
+.info-box.green{background:var(--green-bg);border-left:3px solid var(--green);color:var(--text)}
+.info-box.blue{background:var(--blue-bg);border-left:3px solid var(--blue);color:var(--text)}
+.info-box.amber{background:var(--amber-bg);border-left:3px solid var(--amber);color:var(--text)}
+.info-box.red{background:var(--red-bg);border-left:3px solid var(--red);color:var(--text)}
+.info-box.purple{background:var(--purple-bg);border-left:3px solid var(--purple);color:var(--text)}
+
+/* FLASHCARDS */
+.fc-controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.fc-stats{font-size:.8rem;color:var(--text3);margin-left:auto}
+.fc-arena{display:flex;justify-content:center;margin-bottom:24px}
+.flashcard-wrap{perspective:800px;width:100%;max-width:460px;height:260px;cursor:pointer}
+.flashcard{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s}
+.flashcard.flipped{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center}
+.fc-face.back{transform:rotateY(180deg)}
+.fc-face .fc-tag{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.fc-face .fc-word{font-family:var(--font-head);font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.fc-face .fc-hint{font-size:.8rem;color:var(--text3);font-style:italic}
+.fc-face .fc-def{font-size:.88rem;color:var(--text2);line-height:1.6}
+.fc-face .fc-flip-hint{font-size:.72rem;color:var(--text3);margin-top:16px}
+.fc-rate-btns{display:flex;gap:12px;justify-content:center}
+.fc-progress-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-size:.8rem;color:var(--text3)}
+.fc-dot-row{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:12px}
+.fc-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.fc-dot.known{background:var(--green)}
+.fc-dot.again{background:var(--red)}
+
+/* MATCHING */
+.match-container{max-width:700px}
+.match-columns{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.match-col-title{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;font-weight:600}
+.match-item{background:var(--card);border:2px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:8px;font-size:.88rem;cursor:pointer;transition:border-color .2s,background .2s;user-select:none;min-height:42px}
+.match-item.selected{border-color:var(--accent);background:var(--green-bg)}
+.match-item.matched{border-color:var(--green);background:var(--green-bg);color:var(--green);cursor:default}
+.match-item.wrong{border-color:var(--red);background:var(--red-bg)}
+.match-pair-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.match-pair{display:flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid var(--green);border-radius:var(--radius-sm);padding:8px 12px;font-size:.85rem}
+.match-pair .mp-left{flex:1;font-weight:600;color:var(--text)}
+.match-pair .mp-arrow{color:var(--text3)}
+.match-pair .mp-right{flex:1;color:var(--text2)}
+.match-pair .mp-remove{background:none;border:none;cursor:pointer;color:var(--red);font-size:1rem;margin-left:auto}
+.match-result-msg{font-size:.88rem;padding:8px 12px;border-radius:var(--radius-sm);margin-bottom:12px}
+
+/* FILL IN THE BLANK */
+.fitb-sentence{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:10px;font-size:.9rem;line-height:1.8}
+.fitb-input{border:none;border-bottom:2px solid var(--accent);background:transparent;font-family:var(--font-body);font-size:.9rem;color:var(--text);padding:2px 4px;min-width:80px;outline:none;transition:border-color .2s}
+.fitb-input:focus{border-bottom-color:var(--purple)}
+.fitb-input.correct{border-bottom-color:var(--green);color:var(--green)}
+.fitb-input.wrong{border-bottom-color:var(--red);color:var(--red)}
+.fitb-feedback{font-size:.75rem;margin-left:4px}
+.fitb-feedback.correct{color:var(--green)}
+.fitb-feedback.wrong{color:var(--red)}
+
+/* QUIZ */
+.quiz-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.difficulty-btns{display:flex;gap:8px}
+.diff-btn{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:6px 16px;font-size:.78rem;cursor:pointer;font-family:var(--font-body);transition:all .2s}
+.diff-btn.active.easy{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.diff-btn.active.medium{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+.diff-btn.active.hard{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;box-shadow:var(--card-shadow);margin-bottom:16px}
+.quiz-qnum{font-size:.75rem;color:var(--text3);margin-bottom:6px;font-family:var(--font-mono)}
+.quiz-question{font-family:var(--font-head);font-size:1.05rem;margin-bottom:20px;color:var(--text);line-height:1.5}
+.quiz-options{display:grid;grid-template-columns:1fr;gap:8px}
+.quiz-option{background:var(--bg2);border:2px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;cursor:pointer;font-size:.88rem;transition:all .2s;text-align:left;font-family:var(--font-body);color:var(--text)}
+.quiz-option:hover:not(:disabled){border-color:var(--accent);background:var(--green-bg)}
+.quiz-option.correct{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.quiz-option.wrong{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.quiz-option:disabled{cursor:default}
+.quiz-explanation{background:var(--blue-bg);border:1px solid var(--blue);border-radius:var(--radius-sm);padding:12px 14px;font-size:.85rem;margin-top:10px;line-height:1.6;display:none}
+.quiz-explanation.show{display:block}
+.quiz-progress-bar{background:var(--border);border-radius:99px;height:6px;margin-bottom:20px;overflow:hidden}
+.quiz-progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .3s}
+.quiz-results{text-align:center;padding:24px}
+.quiz-results .score-big{font-family:var(--font-head);font-size:3rem;font-weight:700;color:var(--accent)}
+.quiz-results .grade{font-size:1.2rem;color:var(--text2);margin-bottom:16px}
+.quiz-history{margin-top:20px}
+.quiz-history h4{font-size:.85rem;font-weight:600;margin-bottom:8px;color:var(--text2)}
+.history-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg2);border-radius:var(--radius-sm);margin-bottom:4px;font-size:.8rem;color:var(--text3)}
+
+/* EXAM */
+.exam-intro{max-width:560px}
+.exam-timer{font-family:var(--font-mono);font-size:1.2rem;background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--radius-sm);padding:6px 16px;color:var(--amber)}
+.exam-timer.urgent{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+.exam-question{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--card-shadow);margin-bottom:16px}
+.exam-q-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:6px;font-family:var(--font-mono)}
+.exam-results-wrap h2{font-family:var(--font-head);font-size:1.5rem;margin-bottom:6px}
+.exam-score-strip{display:flex;gap:20px;margin:16px 0;flex-wrap:wrap}
+.exam-score-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 18px;text-align:center;box-shadow:var(--card-shadow)}
+.exam-score-item .esn{font-family:var(--font-head);font-size:1.8rem;font-weight:700;color:var(--accent)}
+.exam-score-item .esl{font-size:.72rem;color:var(--text3)}
+.exam-correction{margin-top:20px}
+.exam-q-result{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px}
+.exam-q-result .eq-header{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+.exam-q-result .eq-icon{font-size:1rem;flex-shrink:0}
+.exam-q-result .eq-q{font-size:.88rem;font-weight:600;color:var(--text);flex:1}
+.exam-q-result .eq-detail{font-size:.82rem;color:var(--text2);line-height:1.5}
+.exam-q-result.eq-correct{border-left:3px solid var(--green)}
+.exam-q-result.eq-wrong{border-left:3px solid var(--red)}
+
+/* GLOSSARY */
+.glossary-search{width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;font-size:.9rem;font-family:var(--font-body);color:var(--text);outline:none;margin-bottom:20px;transition:border-color .2s}
+.glossary-search:focus{border-color:var(--accent)}
+.glossary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.glossary-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--card-shadow)}
+.glossary-card .g-term{font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.glossary-card .g-def{font-size:.83rem;color:var(--text2);line-height:1.55;margin-bottom:8px}
+.glossary-card .g-example{font-size:.78rem;color:var(--text3);font-style:italic;border-top:1px solid var(--border);padding-top:6px}
+.tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.tag.green{background:var(--green-bg);color:var(--green)}
+.tag.blue{background:var(--blue-bg);color:var(--blue)}
+.tag.amber{background:var(--amber-bg);color:var(--amber)}
+.tag.red{background:var(--red-bg);color:var(--red)}
+.tag.purple{background:var(--purple-bg);color:var(--purple)}
+
+/* CONFETTI */
+.confetti-wrap{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden}
+.confetti-piece{position:absolute;width:10px;height:10px;top:-20px;animation:confettiFall linear forwards}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* BACK TO TOP */
+.back-top{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:1.1rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:400;transition:background .2s}
+.back-top:hover{background:var(--accent2)}
+.back-top.show{display:flex}
+
+/* MOBILE */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.mobile-open{transform:translateX(0)}
+  .sidebar-collapse-btn{display:none}
+  .main-area{margin-left:0}
+  .page-content{padding:16px}
+  .mode-grid{grid-template-columns:1fr 1fr}
+  .match-columns{grid-template-columns:1fr}
+  .hamburger{display:flex !important}
+}
+.hamburger{display:none;align-items:center;justify-content:center;width:36px;height:36px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:1.1rem;color:var(--text2);flex-shrink:0}
+
+/* UTILITY */
+.hidden{display:none!important}
+.mt8{margin-top:8px}
+.mt16{margin-top:16px}
+.mt20{margin-top:20px}
+.mb12{margin-bottom:12px}
+.flex-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.page-title{font-family:var(--font-head);font-size:1.6rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.page-subtitle{font-size:.88rem;color:var(--text2);margin-bottom:24px}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:190;display:none}
+.overlay.show{display:block}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="closeMobileSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-logo">
+      <div class="logo-text">⚖️ LernApp</div>
+      <div class="logo-sub">Close-up Unit 7 · Law &amp; Order</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Modi</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" class="active" onclick="showPage('landing',this)"><span class="nav-icon">🏠</span>Startseite</a></li>
+        <li><a href="#" onclick="showPage('crash',this)"><span class="nav-icon">⚡</span>Crash Course</a></li>
+        <li><a href="#" onclick="showPage('standard',this)"><span class="nav-icon">📖</span>Standard Summary</a></li>
+        <li><a href="#" onclick="showPage('full',this)"><span class="nav-icon">🎓</span>Full Summary</a></li>
+        <li><a href="#" onclick="showPage('quiz',this)"><span class="nav-icon">🧠</span>Quiz</a></li>
+        <li><a href="#" onclick="showPage('exam',this)"><span class="nav-icon">📝</span>Prüfungssimulation</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Übungen</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" onclick="showPage('flashcards',this)"><span class="nav-icon">🃏</span>Flashcards</a></li>
+        <li><a href="#" onclick="showPage('vocabcards',this)"><span class="nav-icon">📖</span>Vocab Reference</a></li>
+        <li><a href="#" onclick="showPage('matching',this)"><span class="nav-icon">🔗</span>Zuordnung</a></li>
+        <li><a href="#" onclick="showPage('fitb',this)"><span class="nav-icon">✏️</span>Lückentext</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Referenz</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" onclick="showPage('glossary',this)"><span class="nav-icon">📚</span>Glossar</a></li>
+      </ul>
+    </div>
+  </div>
+</aside>
+
+<button class="sidebar-collapse-btn" id="collapseBtn" onclick="toggleSidebar()" title="Sidebar aus-/einklappen">◀</button>
+
+<!-- MAIN -->
+<div class="main-area" id="mainArea">
+  <header class="topbar">
+    <button class="hamburger" id="hamburger" onclick="openMobileSidebar()">☰</button>
+    <div class="topbar-breadcrumb">
+      <span>Unit 7 · </span><strong id="breadcrumb">Startseite</strong>
+    </div>
+    <div class="topbar-actions">
+      <a href="https://geniiiiiiiiiiiiiiiiiiiiiiii.github.io/lernapp/" class="hub-btn">← Zurück zum LernHub</a>
+      <button class="dark-toggle" onclick="toggleDark()">🌙 Dark</button>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- LANDING -->
+    <div class="page active" id="page-landing">
+      <div class="landing-hero">
+        <h1>⚖️ Close-up Unit 7</h1>
+        <p>Law and Order — Vokabular, Grammatik &amp; Übungen auf einen Blick.</p>
+      </div>
+      <div class="stat-strip">
+        <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Crash Cards</div></div>
+        <div class="stat-card"><div class="stat-num">20</div><div class="stat-label">Flashcards</div></div>
+        <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Modi</div></div>
+        <div class="stat-card"><div class="stat-num">3</div><div class="stat-label">Schwierigkeiten</div></div>
+        <div class="stat-card"><div class="stat-num">40+</div><div class="stat-label">Vokabeln</div></div>
+      </div>
+      <div class="mode-grid">
+        <div class="mode-card" onclick="showPage('crash',null)">
+          <div class="mode-emoji">⚡</div>
+          <div class="mode-title">Crash Course</div>
+          <div class="mode-desc">Karten durchswipen, nur das Wesentliche — ideal für Note 4.</div>
+        </div>
+        <div class="mode-card" onclick="showPage('standard',null)">
+          <div class="mode-emoji">📖</div>
+          <div class="mode-title">Standard Summary</div>
+          <div class="mode-desc">Strukturierter Überblick mit mittlerem Detailgrad.</div>
+        </div>
+        <div class="mode-card" onclick="showPage('full',null)">
+          <div class="mode-emoji">🎓</div>
+          <div class="mode-title">Full Summary</div>
+          <div class="mode-desc">Vollständige Erklärungen, Beispiele und Tabellen für die Note 6.</div>
+        </div>
+        <div class="mode-card" onclick="showPage('quiz',null)">
+          <div class="mode-emoji">🧠</div>
+          <div class="mode-title">Quiz</div>
+          <div class="mode-desc">Multiple Choice in drei Schwierigkeitsstufen mit Erklärungen.</div>
+        </div>
+        <div class="mode-card" onclick="showPage('exam',null)">
+          <div class="mode-emoji">📝</div>
+          <div class="mode-title">Prüfungssimulation</div>
+          <div class="mode-desc">15 Fragen, 15 Minuten Timer — realistische Prüfungsbedingungen.</div>
+        </div>
+      </div>
+      <div class="quick-jump">
+        <h3>Schnellzugriff Übungen</h3>
+        <div class="quick-jump-row">
+          <button class="qj-btn" onclick="showPage('flashcards',null)">🃏 Flashcards</button>
+          <button class="qj-btn" onclick="showPage('matching',null)">🔗 Zuordnung</button>
+          <button class="qj-btn" onclick="showPage('fitb',null)">✏️ Lückentext</button>
+          <button class="qj-btn" onclick="showPage('glossary',null)">📚 Glossar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRASH COURSE -->
+    <div class="page" id="page-crash">
+      <h1 class="page-title">⚡ Crash Course</h1>
+      <p class="page-subtitle">Swipe durch die wichtigsten Fakten — Tastatur: ← →</p>
+      <div class="crash-container">
+        <div class="crash-progress-dots" id="crashDots"></div>
+        <div id="crashCardArea"></div>
+        <div class="crash-nav" id="crashNav">
+          <button class="crash-nav-btn" id="crashPrev" onclick="crashNav(-1)">← Zurück</button>
+          <span class="crash-counter" id="crashCounter"></span>
+          <button class="crash-nav-btn" id="crashNext" onclick="crashNav(1)">Weiter →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STANDARD SUMMARY -->
+    <div class="page" id="page-standard">
+      <h1 class="page-title">📖 Standard Summary</h1>
+      <p class="page-subtitle">Klicke auf eine Karte, um sie zu öffnen. Hake ab, wenn du das Thema kennst.</p>
+      <div class="progress-bar-wrap">
+        <div class="pb-label">Dein Fortschritt</div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" id="stdProgress" style="width:0%"></div></div>
+        <div class="pb-pct" id="stdProgressPct">0%</div>
+      </div>
+      <div id="standardContent"></div>
+    </div>
+
+    <!-- FULL SUMMARY -->
+    <div class="page" id="page-full">
+      <h1 class="page-title">🎓 Full Summary</h1>
+      <p class="page-subtitle">Vollständige Erklärungen mit Beispielen, Tabellen und Übungshinweisen.</p>
+      <div class="progress-bar-wrap">
+        <div class="pb-label">Dein Fortschritt</div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" id="fullProgress" style="width:0%"></div></div>
+        <div class="pb-pct" id="fullProgressPct">0%</div>
+      </div>
+      <div id="fullContent"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="page" id="page-quiz">
+      <h1 class="page-title">🧠 Quiz</h1>
+      <p class="page-subtitle">Wähle eine Schwierigkeitsstufe und starte das Quiz.</p>
+      <div id="quizArea"></div>
+    </div>
+
+    <!-- EXAM -->
+    <div class="page" id="page-exam">
+      <h1 class="page-title">📝 Prüfungssimulation</h1>
+      <div id="examArea"></div>
+    </div>
+
+    <!-- FLASHCARDS -->
+    <div class="page" id="page-flashcards">
+      <h1 class="page-title">🃏 Flashcards</h1>
+      <p class="page-subtitle">Klicke auf die Karte, um die Rückseite zu sehen.</p>
+      <div id="fcArea"></div>
+    </div>
+
+    <!-- VOCAB REFERENCE FLASHCARDS -->
+    <div class="page" id="page-vocabcards">
+      <h1 class="page-title">📖 Vocab Reference Flashcards</h1>
+      <p class="page-subtitle">Alle Vokabeln aus dem Bild — Englisch, Deutsch & Beispielsatz. Klicke auf die Karte zum Umdrehen.</p>
+      <div class="fc-controls">
+        <button class="btn btn-secondary btn-sm" onclick="vcFilter('all')">Alle</button>
+        <button class="btn btn-secondary btn-sm" onclick="vcFilter('Crime')">⚖️ Crime</button>
+        <button class="btn btn-secondary btn-sm" onclick="vcFilter('Prepositions')">🔗 Präpositionen</button>
+        <button class="btn btn-secondary btn-sm" onclick="vcFilter('Phrasal Verbs')">💨 Phrasal Verbs</button>
+        <button class="btn btn-secondary btn-sm" onclick="vcFilter('Expressions')">💬 Expressions</button>
+        <span class="fc-stats" id="vcStats"></span>
+      </div>
+      <div class="fc-arena">
+        <div class="flashcard-wrap" onclick="vcFlip()">
+          <div class="flashcard" id="vcCard">
+            <div class="fc-face front">
+              <div class="fc-tag" id="vcTag"></div>
+              <div class="fc-word" id="vcWord"></div>
+              <div class="fc-hint" id="vcHint"></div>
+              <div class="fc-flip-hint">Klicken zum Umdrehen 🔄</div>
+            </div>
+            <div class="fc-face back">
+              <div class="fc-tag" id="vcTagB"></div>
+              <div class="fc-word" id="vcDE" style="font-size:1.1rem"></div>
+              <div class="fc-def" id="vcEx" style="margin-top:10px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="crash-nav">
+        <button class="crash-nav-btn" onclick="vcNav(-1)">← Zurück</button>
+        <span class="crash-counter" id="vcCounter"></span>
+        <button class="crash-nav-btn" onclick="vcNav(1)">Weiter →</button>
+      </div>
+      <div class="fc-dot-row" id="vcDots"></div>
+    </div>
+
+
+    <div class="page" id="page-matching">
+      <h1 class="page-title">🔗 Zuordnung</h1>
+      <p class="page-subtitle">Wähle ein Wort links und dann die passende Definition rechts.</p>
+      <div class="match-container" id="matchArea"></div>
+    </div>
+
+    <!-- FITB -->
+    <div class="page" id="page-fitb">
+      <h1 class="page-title">✏️ Lückentext</h1>
+      <p class="page-subtitle">Fülle die Lücken aus und klicke dann auf "Prüfen".</p>
+      <div id="fitbArea"></div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="page" id="page-glossary">
+      <h1 class="page-title">📚 Glossar</h1>
+      <p class="page-subtitle">Alle Fachbegriffe aus Unit 7 — durchsuche und filtere die Einträge.</p>
+      <input class="glossary-search" id="glossarySearch" placeholder="Suche nach Begriff oder Definition..." oninput="filterGlossary(this.value)">
+      <div class="glossary-grid" id="glossaryGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const crashCards = [
+  {
+    emoji:'📜', topic:'Grammatik', title:'The Passive Voice',
+    bullets:[
+      'Bildung: "to be" + Past Participle',
+      'Aktiv: I wash the car. → Passiv: The car is washed (by me).',
+      'Peter played the flute. → The flute was played by Peter.',
+      'Benutzen: wenn der Handelnde unbekannt oder unwichtig ist',
+      'Oft in Regeln & Anweisungen: Mobile phones must be turned off.'
+    ]
+  },
+  {
+    emoji:'🔄', topic:'Grammatik', title:'Passive Infinitive (from infinitive)',
+    bullets:[
+      'Fokus auf Handlung/Objekt, nicht auf Person',
+      'Sehr häufig nach Modalverben: can, must, should, will',
+      'Aktiv: You must finish the report. → Passiv: The report must be finished.',
+      'Alex wants to be praised (by the teacher).',
+      'She hopes to be chosen (by the team).'
+    ]
+  },
+  {
+    emoji:'📷', topic:'Grammatik', title:'Passive Infinitive (from gerund)',
+    bullets:[
+      'Aktiv Gerund → Passiv: "being" + Past Participle',
+      'I don\'t like people telling me → I don\'t like being told.',
+      'She enjoys being photographed.',
+      'He avoids being seen in public.'
+    ]
+  },
+  {
+    emoji:'🤝', topic:'Grammatik', title:'Causative Active',
+    bullets:[
+      '"have": have + O + infinitive (ohne "to") — Autorität nötig',
+      '"get": get + O + to + infinitive — jemanden überreden',
+      'I\'ll have my sister help you (Autorität vorhanden)',
+      'Can you get your friend to talk to me?',
+      '"have" nur wenn man Autorität hat, "get" eher überreden'
+    ]
+  },
+  {
+    emoji:'⚖️', topic:'Vokabular', title:'Crime Vocabulary (Kernbegriffe)',
+    bullets:[
+      'accuse / arrest / commit a crime / confess / evidence',
+      'find guilty / hold a trial / innocent / investigate / jury',
+      'pay a fine / proof / receive a sentence / suspect / take to court',
+      'scene of the crime / burglary / case / break the law'
+    ]
+  },
+  {
+    emoji:'🗣️', topic:'Vokabular', title:'Präpositionen, Phrasal Verbs & Expressions',
+    bullets:[
+      'accuse of / arrest for / be against the law / be innocent of',
+      'confess to / find guilty of / sentence to / suspect of',
+      'get away with (ungestraft davonkommen) / see through (durchschauen)',
+      'burn down / go off / run away / see to',
+      'Expressions: change your ways / keep an eye on / lose track of time'
+    ]
+  }
+];
+
+const standardTopics = [
+  {
+    section:'Grammatik', emoji:'📜', title:'The Passive Voice',
+    body:`<div class="body-text">
+      <p>Das Passiv wird mit <strong>"to be" + Past Participle</strong> gebildet. Es betont die Handlung oder das Objekt, nicht die Person, die etwas tut.</p>
+      <h4>Wann verwendet man das Passiv?</h4>
+      <ul><li>Wenn die handelnde Person unbekannt oder unwichtig ist</li><li>In Regeln und Anweisungen</li></ul>
+      <h4>Beispiele</h4>
+      <div class="example">I wash the car. → The car <strong>is washed</strong> (by me).</div>
+      <div class="example">Peter played the flute. → The flute <strong>was played</strong> by Peter.</div>
+      <div class="example">Mobile phones <strong>must be turned off</strong> during the exam.</div>
+    </div>`
+  },
+  {
+    section:'Grammatik', emoji:'🔄', title:'Passive Infinitive (from infinitive)',
+    body:`<div class="body-text">
+      <p>Wird oft nach <strong>Modalverben</strong> (can, must, should, will) verwendet. Fokus liegt auf der Handlung, nicht auf dem Handelnden.</p>
+      <div class="table-wrap"><table><tr><th>Active Voice</th><th>Passive Voice</th></tr>
+      <tr><td>You must finish the report.</td><td>The report <strong>must be finished</strong>.</td></tr>
+      <tr><td>They can fix the car.</td><td>The car <strong>can be fixed</strong>.</td></tr>
+      <tr><td>Alex wants the teacher to praise him.</td><td>Alex wants <strong>to be praised</strong> (by the teacher).</td></tr></table></div>
+    </div>`
+  },
+  {
+    section:'Grammatik', emoji:'📷', title:'Passive Infinitive (from gerund)',
+    body:`<div class="body-text">
+      <p>Das Gerund im Passiv lautet <strong>"being" + Past Participle</strong>.</p>
+      <div class="table-wrap"><table><tr><th>Active Voice</th><th>Passive Voice</th></tr>
+      <tr><td>I don't like people telling me.</td><td>I don't like <strong>being told</strong>.</td></tr>
+      <tr><td>She enjoys people photographing her.</td><td>She enjoys <strong>being photographed</strong>.</td></tr>
+      <tr><td>He avoids people seeing him.</td><td>He avoids <strong>being seen</strong>.</td></tr></table></div>
+    </div>`
+  },
+  {
+    section:'Grammatik', emoji:'🤝', title:'Causative Active (have/get)',
+    body:`<div class="body-text">
+      <p><strong>have:</strong> have + O + Infinitiv (ohne "to") — man hat Autorität über die Person<br>
+      <strong>get:</strong> get + O + to + Infinitiv — man überredet jemanden</p>
+      <div class="example">I'll <strong>have</strong> my sister <strong>help</strong> you. (Autorität vorhanden)</div>
+      <div class="example">Can you <strong>get</strong> your friend <strong>to talk</strong> to me?</div>
+    </div>`
+  },
+  {
+    section:'Vokabular', emoji:'⚖️', title:'Crime Vocabulary',
+    body:`<div class="body-text">
+      <ul>
+      <li><strong>accuse</strong> — jemanden beschuldigen</li>
+      <li><strong>arrest</strong> — verhaften</li>
+      <li><strong>break the law</strong> — das Gesetz brechen</li>
+      <li><strong>burglary</strong> — Einbruch</li>
+      <li><strong>commit a crime</strong> — ein Verbrechen begehen</li>
+      <li><strong>confess</strong> — gestehen</li>
+      <li><strong>evidence</strong> — Beweise</li>
+      <li><strong>find someone guilty</strong> — jemanden schuldig sprechen</li>
+      <li><strong>hold a trial</strong> — einen Prozess abhalten</li>
+      <li><strong>innocent</strong> — unschuldig</li>
+      <li><strong>investigate</strong> — ermitteln</li>
+      <li><strong>jury</strong> — Geschworene</li>
+      <li><strong>pay a fine</strong> — eine Geldstrafe zahlen</li>
+      <li><strong>receive a sentence</strong> — ein Urteil erhalten</li>
+      <li><strong>suspect</strong> — verdächtigen / Verdächtiger</li>
+      <li><strong>take someone to court</strong> — jemanden vor Gericht bringen</li>
+      </ul>
+    </div>`
+  },
+  {
+    section:'Vokabular', emoji:'🔗', title:'Phrasal Verbs & Expressions',
+    body:`<div class="body-text">
+      <h4>Phrasal Verbs</h4>
+      <ul>
+      <li><strong>burn down</strong> — abbrennen</li>
+      <li><strong>get away with</strong> — ungestraft davonkommen</li>
+      <li><strong>go off</strong> — losgehen (Alarm)</li>
+      <li><strong>run away</strong> — weglaufen / fliehen</li>
+      <li><strong>see through</strong> — durchschauen / nicht täuschen lassen</li>
+      <li><strong>see to</strong> — sich kümmern um</li>
+      </ul>
+      <h4>Expressions</h4>
+      <ul>
+      <li><strong>change your ways</strong> — sein Leben ändern</li>
+      <li><strong>couldn't care less</strong> — es ist einem völlig egal</li>
+      <li><strong>do justice</strong> — Gerechtigkeit widerfahren lassen</li>
+      <li><strong>give it a go</strong> — es versuchen</li>
+      <li><strong>have no choice</strong> — keine Wahl haben</li>
+      <li><strong>keep an eye on</strong> — ein Auge haben auf</li>
+      <li><strong>lose track of time</strong> — die Zeit vergessen</li>
+      <li><strong>make a fool of myself</strong> — sich blamieren</li>
+      </ul>
+    </div>`
+  }
+];
+
+const fullTopics = [
+  {
+    section:'Grammatik — Passiv', emoji:'📜', title:'The Passive Voice — Vollständige Erklärung',
+    body:`<div class="body-text">
+      <h4>Bildung</h4>
+      <p>Das Passiv besteht aus dem Hilfsverb <strong>"to be"</strong> (in der richtigen Zeitform) und dem <strong>Past Participle</strong> des Hauptverbs.</p>
+      <div class="info-box blue">Formel: Subjekt + to be (konjugiert) + Past Participle (+ by + Handelnder)</div>
+      <h4>Wann und warum?</h4>
+      <ul>
+        <li>Wenn der Handelnde <strong>unbekannt</strong> ist: The car was stolen.</li>
+        <li>Wenn der Handelnde <strong>unwichtig</strong> ist: The bridge will be completed next year.</li>
+        <li>In <strong>Regeln und Anweisungen</strong>: Mobile phones must be turned off during the exam.</li>
+        <li>Wenn man den Handelnden <strong>bewusst verschweigen</strong> will</li>
+      </ul>
+      <h4>Beispiele nach Zeitform</h4>
+      <div class="table-wrap"><table>
+        <tr><th>Zeitform</th><th>Aktiv</th><th>Passiv</th></tr>
+        <tr><td>Simple Present</td><td>I wash the car.</td><td>The car is washed.</td></tr>
+        <tr><td>Simple Past</td><td>Peter played the flute.</td><td>The flute was played.</td></tr>
+        <tr><td>Will Future</td><td>They will complete the bridge.</td><td>The bridge will be completed.</td></tr>
+        <tr><td>Present Continuous</td><td>They are investigating.</td><td>It is being investigated.</td></tr>
+      </table></div>
+      <h4>Negation</h4>
+      <div class="example">Belgium does not produce the best chocolate. → The best chocolate is not produced by Belgium.</div>
+      <div class="info-box amber">⚠️ Der Handelnde wird mit "by" angefügt, aber nur wenn er relevant ist!</div>
+    </div>`
+  },
+  {
+    section:'Grammatik — Passiv', emoji:'🔄', title:'Passive Infinitive (from infinitive)',
+    body:`<div class="body-text">
+      <h4>Funktion</h4>
+      <p>Der Passive Infinitive rückt die <strong>Handlung oder das Objekt</strong> in den Vordergrund, nicht die Person. Er ist besonders verbreitet nach <strong>Modalverben</strong> (can, must, should, will).</p>
+      <div class="info-box green">Formel: Modalverb + <strong>be</strong> + Past Participle</div>
+      <div class="table-wrap"><table>
+        <tr><th>Active Voice</th><th>Passive Voice</th></tr>
+        <tr><td>You must finish the report.</td><td>The report must be finished.</td></tr>
+        <tr><td>They can fix the car.</td><td>The car can be fixed.</td></tr>
+        <tr><td>We should invite Sarah.</td><td>Sarah should be invited.</td></tr>
+        <tr><td>Alex wants the teacher to praise him.</td><td>Alex wants to be praised (by the teacher).</td></tr>
+        <tr><td>She hopes the team chooses her.</td><td>She hopes to be chosen (by the team).</td></tr>
+      </table></div>
+      <div class="info-box purple">💡 Nach "want", "hope", "expect" + to → "to be" + Past Participle</div>
+    </div>`
+  },
+  {
+    section:'Grammatik — Passiv', emoji:'📷', title:'Passive Infinitive (from gerund)',
+    body:`<div class="body-text">
+      <h4>Funktion</h4>
+      <p>Wenn ein Gerund (Verb + -ing) im Satz passivisch gemeint ist, wird es zu <strong>"being" + Past Participle</strong> umgewandelt.</p>
+      <div class="info-box green">Formel: being + Past Participle</div>
+      <div class="table-wrap"><table>
+        <tr><th>Active (Gerund)</th><th>Passive (Gerund)</th></tr>
+        <tr><td>I don't like people <em>telling me</em> what to do.</td><td>I don't like <strong>being told</strong> what to do.</td></tr>
+        <tr><td>She enjoys people <em>photographing her</em>.</td><td>She enjoys <strong>being photographed</strong>.</td></tr>
+        <tr><td>He avoids people <em>seeing him</em> in public.</td><td>He avoids <strong>being seen</strong> in public.</td></tr>
+      </table></div>
+      <div class="info-box blue">ℹ️ Typische Verben vor Gerund: like, enjoy, avoid, hate, mind, prefer</div>
+      <h4>Weitere Beispiele aus dem Alltag</h4>
+      <div class="example">She's afraid of being fired.</div>
+      <div class="example">I don't like being tagged in ugly photos.</div>
+    </div>`
+  },
+  {
+    section:'Grammatik — Causative', emoji:'🤝', title:'Causative Active — have & get',
+    body:`<div class="body-text">
+      <h4>have — Autorität</h4>
+      <p>Wird verwendet, wenn man <strong>Autorität</strong> über eine Person hat und diese etwas tun lässt.</p>
+      <div class="info-box green">Formel: have + Objekt + Infinitiv (ohne "to")</div>
+      <div class="example">I'll <strong>have</strong> my sister <strong>help</strong> you with your homework.</div>
+      <div class="info-box amber">⚠️ "have" kann nur verwendet werden, wenn man wirklich Autorität hat!</div>
+      <h4>get — Überreden</h4>
+      <p>Wird verwendet, wenn man jemanden <strong>überredet</strong> oder dazu bringt, etwas zu tun.</p>
+      <div class="info-box blue">Formel: get + Objekt + <strong>to</strong> + Infinitiv</div>
+      <div class="example">Can you <strong>get</strong> your friend <strong>to talk</strong> to me?</div>
+      <h4>Vergleich</h4>
+      <div class="table-wrap"><table>
+        <tr><th></th><th>have</th><th>get</th></tr>
+        <tr><td>Kontext</td><td>Autorität (Chef, Eltern...)</td><td>Überreden, bitten</td></tr>
+        <tr><td>Formel</td><td>have + O + Infinitiv</td><td>get + O + to + Infinitiv</td></tr>
+        <tr><td>Beispiel</td><td>I'll have him do it.</td><td>I'll get him to do it.</td></tr>
+      </table></div>
+    </div>`
+  },
+  {
+    section:'Vokabular — Crime', emoji:'⚖️', title:'Crime Vocabulary — Vollständig',
+    body:`<div class="body-text">
+      <div class="table-wrap"><table>
+        <tr><th>Englisch</th><th>Deutsch</th><th>Beispielsatz</th></tr>
+        <tr><td>accuse</td><td>beschuldigen</td><td>Emma was accused of stealing the money.</td></tr>
+        <tr><td>arrest</td><td>verhaften</td><td>The police arrested two possible criminals.</td></tr>
+        <tr><td>break the law</td><td>das Gesetz brechen</td><td>If you break the law, you might go to prison.</td></tr>
+        <tr><td>burglary</td><td>Einbruchsdiebstahl</td><td>There were two burglaries last night.</td></tr>
+        <tr><td>case</td><td>Fall</td><td>The case will be taken to court next month.</td></tr>
+        <tr><td>commit a crime</td><td>ein Verbrechen begehen</td><td>The politician denied committing a crime.</td></tr>
+        <tr><td>confess</td><td>gestehen</td><td>She finally confessed to the robbery.</td></tr>
+        <tr><td>evidence</td><td>Beweise</td><td>There is no evidence that I did anything wrong.</td></tr>
+        <tr><td>find someone guilty</td><td>jemanden schuldig sprechen</td><td>The judge found the man guilty of the crime.</td></tr>
+        <tr><td>hold a trial</td><td>einen Prozess führen</td><td>The trial will be held next month.</td></tr>
+        <tr><td>innocent</td><td>unschuldig</td><td>I believe he is innocent.</td></tr>
+        <tr><td>investigate</td><td>ermitteln</td><td>The police are investigating the crime.</td></tr>
+        <tr><td>jury</td><td>Geschworene</td><td>The jury will decide whether the men are guilty.</td></tr>
+        <tr><td>pay a fine</td><td>Geldstrafe zahlen</td><td>If you park here, you might have to pay a fine.</td></tr>
+        <tr><td>proof</td><td>Beweis</td><td>Is there any proof that he committed the crime?</td></tr>
+        <tr><td>receive a sentence</td><td>ein Urteil/Strafe erhalten</td><td>The man received a sentence of five years.</td></tr>
+        <tr><td>scene of the crime</td><td>Tatort</td><td>Police officers are at the scene of the crime.</td></tr>
+        <tr><td>suspect</td><td>verdächtigen / Verdächtiger</td><td>There are two suspects.</td></tr>
+        <tr><td>take someone to court</td><td>jemanden verklagen</td><td>Jeff was taken to court after breaking the law.</td></tr>
+      </table></div>
+    </div>`
+  },
+  {
+    section:'Vokabular — Präpositionen', emoji:'🔗', title:'Präpositionen (Prepositions)',
+    body:`<div class="body-text">
+      <div class="info-box blue">Bestimmte Verben im Bereich "Law" werden mit festen Präpositionen kombiniert!</div>
+      <div class="table-wrap"><table>
+        <tr><th>Ausdruck</th><th>Beispiel</th></tr>
+        <tr><td>accuse someone <strong>of</strong> a crime</td><td>He was accused of a crime he did not commit.</td></tr>
+        <tr><td>arrest someone <strong>for</strong> a crime</td><td>Police arrested the man for burglary.</td></tr>
+        <tr><td>be <strong>against</strong> the law</td><td>Driving over the speed limit is against the law.</td></tr>
+        <tr><td>be innocent <strong>of</strong> a crime</td><td>In court, he claimed to be innocent of stealing.</td></tr>
+        <tr><td>confess <strong>to</strong> a crime</td><td>In the end, the man confessed to damaging the property.</td></tr>
+        <tr><td>find someone guilty <strong>of</strong> a crime</td><td>The jury found the teenagers guilty of vandalism.</td></tr>
+        <tr><td>sentence someone <strong>to</strong> (prison)</td><td>The man was sentenced to three years in prison.</td></tr>
+        <tr><td>suspect someone <strong>of</strong> doing a crime</td><td>Police suspect the boys of stealing the money.</td></tr>
+      </table></div>
+    </div>`
+  },
+  {
+    section:'Vokabular — Phrasal Verbs', emoji:'💨', title:'Phrasal Verbs',
+    body:`<div class="body-text">
+      <div class="table-wrap"><table>
+        <tr><th>Phrasal Verb</th><th>Bedeutung</th><th>Beispiel</th></tr>
+        <tr><td>burn down</td><td>abbrennen</td><td>Someone burned down a bus shelter near my street.</td></tr>
+        <tr><td>get away with</td><td>ungestraft davonkommen</td><td>Police never found out who committed the crime — whoever did it managed to get away with it.</td></tr>
+        <tr><td>go off</td><td>losgehen (Alarm), explodieren</td><td>Someone's car alarm has just gone off.</td></tr>
+        <tr><td>run away</td><td>weglaufen, fliehen</td><td>I saw someone running away from the bank.</td></tr>
+        <tr><td>see through</td><td>durchschauen, nicht täuschen lassen</td><td>It's easy to see through fake emails claiming to be from your bank.</td></tr>
+        <tr><td>see to</td><td>sich kümmern um, erledigen</td><td>The council need to see to all the street lights that aren't working.</td></tr>
+      </table></div>
+    </div>`
+  },
+  {
+    section:'Vokabular — Expressions', emoji:'💬', title:'Expressions & Redewendungen',
+    body:`<div class="body-text">
+      <div class="table-wrap"><table>
+        <tr><th>Expression</th><th>Bedeutung</th><th>Beispiel</th></tr>
+        <tr><td>change your ways</td><td>sein Leben / Verhalten ändern</td><td>He promised to change his ways and not commit any more crimes.</td></tr>
+        <tr><td>couldn't care less</td><td>völlig egal sein</td><td>Some people couldn't care less about dropping rubbish on the street.</td></tr>
+        <tr><td>do justice</td><td>Gerechtigkeit widerfahren lassen</td><td>I'm glad to see that justice was done in the end.</td></tr>
+        <tr><td>give it a go</td><td>es versuchen, ausprobieren</td><td>I haven't tried yoga, but I'd like to give it a go.</td></tr>
+        <tr><td>have no choice</td><td>keine Wahl haben</td><td>I don't want to buy a new laptop, but sadly I have no choice.</td></tr>
+        <tr><td>keep an eye on</td><td>ein Auge haben auf, aufpassen auf</td><td>Can you keep an eye on my bag while I go to the bathroom?</td></tr>
+        <tr><td>lose track of time</td><td>die Zeit vergessen</td><td>I often lose track of time when I'm really busy.</td></tr>
+        <tr><td>make a fool of myself</td><td>sich blamieren, sich lächerlich machen</td><td>I don't want to wear those clothes — I don't want to make a fool of myself.</td></tr>
+      </table></div>
+    </div>`
+  }
+];
+
+const flashcards = [
+  {tag:'Crime',word:'accuse',hint:'Verb',def:'jemanden einer Tat beschuldigen',ex:'"Emma was accused of stealing the money."'},
+  {tag:'Crime',word:'burglary',hint:'Noun',def:'Einbruchsdiebstahl, das Einbrechen in ein Gebäude',ex:'"There were two burglaries in the town centre last night."'},
+  {tag:'Crime',word:'commit a crime',hint:'Expression',def:'ein Verbrechen begehen, eine Straftat ausführen',ex:'"The politician denied committing a crime."'},
+  {tag:'Crime',word:'evidence',hint:'Noun (uncountable)',def:'Beweise, Belege für eine Tat',ex:'"There is no evidence that I did anything wrong."'},
+  {tag:'Crime',word:'innocent',hint:'Adjective',def:'unschuldig, nicht schuldhaft',ex:'"I believe that he is innocent and did nothing wrong."'},
+  {tag:'Crime',word:'jury',hint:'Noun',def:'Geschworene, Laienrichter in einem Prozess',ex:'"The jury will decide whether or not the men are guilty."'},
+  {tag:'Crime',word:'receive a sentence',hint:'Expression',def:'ein Urteil / eine Strafe erhalten',ex:'"The man received a sentence of five years in prison."'},
+  {tag:'Crime',word:'scene of the crime',hint:'Expression',def:'der Tatort, Ort des Verbrechens',ex:'"Police officers are at the scene of the crime."'},
+  {tag:'Preposition',word:'accuse of',hint:'Verb + Prep',def:'jemanden einer Sache beschuldigen (of = wegen)',ex:'"He was accused of a crime he did not commit."'},
+  {tag:'Preposition',word:'confess to',hint:'Verb + Prep',def:'etwas gestehen (to = zu etwas)',ex:'"In the end, the man confessed to damaging the property."'},
+  {tag:'Preposition',word:'sentence to',hint:'Verb + Prep',def:'zu einer Strafe verurteilen',ex:'"The man was sentenced to three years in prison."'},
+  {tag:'Phrasal Verb',word:'get away with',hint:'Phrasal Verb',def:'ungestraft davonkommen, ohne Konsequenzen bleiben',ex:'"Police never found out who committed the crime — whoever did it managed to get away with it."'},
+  {tag:'Phrasal Verb',word:'see through',hint:'Phrasal Verb',def:'jemanden oder etwas durchschauen, sich nicht täuschen lassen',ex:'"It\'s easy to see through fake emails."'},
+  {tag:'Phrasal Verb',word:'go off',hint:'Phrasal Verb',def:'losgehen (z.B. Alarm), explodieren',ex:'"Someone\'s car alarm has just gone off."'},
+  {tag:'Expression',word:'change your ways',hint:'Idiom',def:'sein Verhalten / seinen Lebensstil ändern',ex:'"He promised to change his ways and not commit any more crimes."'},
+  {tag:'Expression',word:'keep an eye on',hint:'Idiom',def:'auf jemanden oder etwas aufpassen, im Auge behalten',ex:'"Can you keep an eye on my bag while I go to the bathroom?"'},
+  {tag:'Grammar',word:'Passive Voice',hint:'Grammatik',def:'Passivform: "to be" + Past Participle. Betont die Handlung, nicht den Handelnden.',ex:'"The car is washed. / The flute was played by Peter."'},
+  {tag:'Grammar',word:'being + Past Participle',hint:'Grammatik (Gerund Passiv)',def:'Passiv-Gerund: Ersetzt aktives Gerund wenn die Handlung passiv ist.',ex:'"I don\'t like being told what to do."'},
+  {tag:'Grammar',word:'have + O + Infinitiv',hint:'Causative (have)',def:'Causative: jemanden (mit Autorität) etwas tun lassen. Kein "to" vor dem Infinitiv.',ex:'"I\'ll have my sister help you."'},
+  {tag:'Grammar',word:'get + O + to + Infinitiv',hint:'Causative (get)',def:'Causative: jemanden überreden, etwas zu tun. Mit "to" vor dem Infinitiv.',ex:'"Can you get your friend to talk to me?"'}
+];
+
+const matchingPairs = [
+  {left:'accuse of',right:'beschuldigen (wegen)'},
+  {left:'get away with',right:'ungestraft davonkommen'},
+  {left:'see through',right:'durchschauen'},
+  {left:'being told',right:'Passiv-Gerund von "tell"'},
+  {left:'must be finished',right:'Passive Infinitive (Modalverb)'},
+  {left:'have + O + Infinitiv',right:'Causative mit Autorität'},
+  {left:'get + O + to + Infinitiv',right:'Causative durch Überreden'},
+  {left:'innocent of',right:'unschuldig (einer Sache)'},
+];
+
+const fitbSentences = [
+  {
+    pre:'The car ', blank:'was stolen', post:' last night. Nobody knows who did it.',
+    hint:'Passiv Simple Past von "steal"'
+  },
+  {
+    pre:'Mobile phones must ', blank:'be turned off', post:' during the exam.',
+    hint:'Passive Infinitive nach Modalverb'
+  },
+  {
+    pre:'She enjoys ', blank:'being photographed', post:' by professional photographers.',
+    hint:'Passiv-Gerund von "photograph"'
+  },
+  {
+    pre:"I'll have my brother ", blank:'fix', post:' the bike — he knows how to do it.',
+    hint:'Causative "have": Infinitiv ohne "to"'
+  },
+  {
+    pre:'Can you get your sister ', blank:'to call', post:' me? I need her help.',
+    hint:'Causative "get": to + Infinitiv'
+  },
+  {
+    pre:'The politician was accused ', blank:'of', post:' committing fraud.',
+    hint:'Präposition nach "accuse"'
+  },
+  {
+    pre:'Police never found out who committed the crime — whoever did it managed to ', blank:'get away with', post:' it.',
+    hint:'Phrasal Verb: ungestraft davonkommen'
+  },
+  {
+    pre:"He promised to ", blank:'change his ways', post:' and never commit a crime again.',
+    hint:'Expression: sein Verhalten ändern'
+  }
+];
+
+const quizQuestions = {
+  easy:[
+    {q:'Wie bildet man das Passiv auf Englisch?',opts:['to be + Past Participle','to have + Past Participle','to do + Infinitive','to get + Gerund'],correct:0,exp:'"The passive is formed with "to be" + past participle, e.g. The car is washed.'},
+    {q:'Was bedeutet "burglary" auf Deutsch?',opts:['Mord','Einbruchsdiebstahl','Betrug','Fahrzeugdiebstahl'],correct:1,exp:'"Burglary" bedeutet Einbruch (in ein Gebäude einbrechen und stehlen).'},
+    {q:'Welche Präposition folgt nach "accuse"?',opts:['for','to','about','of'],correct:3,exp:'Man sagt "accuse someone OF a crime" — z.B. He was accused of stealing.'},
+    {q:'Was bedeutet der Ausdruck "get away with something"?',opts:['etwas verlieren','ungestraft davonkommen','weglaufen','etwas finden'],correct:1,exp:'"Get away with" bedeutet: ohne Konsequenzen/Bestrafung davonkommen.'},
+    {q:'Welches Wort fehlt? "She enjoys ______ photographed."',opts:['being','been','to be','be'],correct:0,exp:'Passiv-Gerund: being + Past Participle. "She enjoys being photographed."'},
+    {q:'Was bedeutet "innocent"?',opts:['schuldig','verhaftet','unschuldig','verdächtig'],correct:2,exp:'"Innocent" bedeutet unschuldig — man hat nichts Falsches getan.'},
+    {q:'Was ist ein "jury" im Englischen?',opts:['Richter','Anwalt','Polizist','Geschworene/Jury'],correct:3,exp:'"The jury will decide whether or not the men are guilty."'},
+    {q:'Welche Präposition folgt auf "confess"?',opts:['of','about','to','for'],correct:2,exp:'Man sagt "confess TO a crime" — z.B. She confessed to the robbery.'},
+    {q:'Was bedeutet "keep an eye on"?',opts:['jemanden ignorieren','jemanden beobachten/aufpassen','jemanden verhaften','jemanden beschuldigen'],correct:1,exp:'"Keep an eye on" = aufpassen auf / im Auge behalten.'},
+    {q:'Was bedeutet "lose track of time"?',opts:['pünktlich sein','die Zeit vergessen','langsam werden','Zeit verschwenden'],correct:1,exp:'"Lose track of time" = die Zeit vergessen, nicht merken wie spät es ist.'}
+  ],
+  medium:[
+    {q:'Was ist der Unterschied zwischen "have" und "get" im Causative Active?',opts:['"have" und "get" sind austauschbar','"have" benötigt Autorität über die Person, "get" bedeutet jemanden überreden','"get" benötigt Autorität, "have" bedeutet überreden','Beide erfordern "to" vor dem Infinitiv'],correct:1,exp:'"have" setzt voraus, dass man Autorität hat (Chef, Eltern). "get" bedeutet jemanden überreden oder dazu bringen.'},
+    {q:'Welcher Satz ist grammatikalisch korrekt?',opts:['I\'ll have my sister to help you.','I\'ll have my sister helping you.','I\'ll have my sister help you.','I\'ll have my sister helped you.'],correct:2,exp:'Causative "have": have + Objekt + Infinitiv OHNE "to". Richtig: I\'ll have my sister help you.'},
+    {q:'Was bedeutet "see through" als Phrasal Verb?',opts:['hindurchsehen (wörtlich)','jemanden/etwas durchschauen, sich nicht täuschen lassen','etwas bis zum Ende begleiten','sich um etwas kümmern'],correct:1,exp:'"See through" = durchschauen, z.B. "It\'s easy to see through fake emails."'},
+    {q:'Wie lautet die Passivform von: "Alex wants the teacher to praise him"?',opts:['Alex wants the teacher to be praised.','Alex wants to be praised (by the teacher).','Alex wants to have been praised.','Alex wants being praised.'],correct:1,exp:'Nach "want + to": Passiv = "to be" + PP. "Alex wants to be praised (by the teacher)."'},
+    {q:'Welche Präposition folgt auf "sentence someone"?',opts:['for','of','to','about'],correct:2,exp:'Man sagt "sentence someone TO (prison/years)". Z.B. "He was sentenced to three years in prison."'},
+    {q:'Was bedeutet "couldn\'t care less"?',opts:['sich sehr kümmern','besorgt sein','es ist einem völlig egal','sich sehr interessieren'],correct:2,exp:'"Couldn\'t care less" = es interessiert mich überhaupt nicht / es ist mir völlig egal.'},
+    {q:'Was ist die passivische Umformung von: "She enjoys people photographing her."?',opts:['She enjoys to be photographed.','She enjoys been photographed.','She enjoys being photographed.','She enjoys have been photographed.'],correct:2,exp:'Passiv-Gerund: "being" + Past Participle. Richtig: "She enjoys being photographed."'},
+    {q:'Was bedeutet "commit a crime"?',opts:['ein Verbrechen beobachten','ein Verbrechen melden','ein Verbrechen begehen','ein Verbrechen lösen'],correct:2,exp:'"Commit a crime" = eine Straftat begehen, ein Verbrechen ausführen.'},
+    {q:'Wofür wird "go off" als Phrasal Verb typischerweise verwendet?',opts:['weglaufen','abbrennen','losgehen (z.B. ein Alarm)','durchschauen'],correct:2,exp:'"Go off" wird für Alarme/Bomben verwendet: "Someone\'s car alarm has just gone off."'},
+    {q:'Welche Aussage über das Passiv ist FALSCH?',opts:['Es wird mit "to be" + Past Participle gebildet','Es wird verwendet wenn der Handelnde unbekannt ist','Es wird immer mit "by" + Handelnder abgeschlossen','Es kommt oft in Regeln und Anweisungen vor'],correct:2,exp:'Der Handelnde (by + Person) wird NUR angefügt wenn er relevant ist — er ist nicht zwingend notwendig.'}
+  ],
+  hard:[
+    {q:'Warum ist dieser Satz FALSCH: "I\'ll get my boss help me with the report."?',opts:['Weil "get" nur mit Nomen verwendet wird','Weil "get" das Infinitiv ohne "to" benötigt, aber hier "to" fehlt','Weil "get" das "to" vor dem Infinitiv benötigt, das hier fehlt','Weil "get" nicht mit Autoritätspersonen verwendet werden kann'],correct:2,exp:'Causative "get" braucht: get + Objekt + TO + Infinitiv. Korrekt: "I\'ll get my boss TO help me."'},
+    {q:'In welchem Satz wird das Passiv FALSCH verwendet?',opts:['The report must be finished by tomorrow.','Mobile phones must be turned off.','She hopes to be chosen by the team.','The jury will decide by the evidence.'],correct:3,exp:'"The jury will decide by the evidence" ist kein Passiv, sondern aktiv. "By" + Beweismittel ist hier nicht Passiv-Konstruktion.'},
+    {q:'Was ist der feine Bedeutungsunterschied zwischen "evidence" und "proof"?',opts:['"evidence" sind mündliche Aussagen, "proof" sind schriftliche Dokumente','"evidence" deutet auf etwas hin (Indizien), "proof" beweist es zweifelsfrei','"evidence" und "proof" sind vollständige Synonyme ohne Unterschied','Beide Wörter sind veraltet und werden nicht mehr verwendet'],correct:1,exp:'"Evidence" sind Indizien/Hinweise, die auf etwas hindeuten. "Proof" ist ein eindeutiger, zweifelsfreier Beweis.'},
+    {q:'Welcher Satz nutzt das Passiv-Gerund korrekt nach einem Adjektiv?',opts:['She\'s afraid of being fired.','She\'s afraid of been fired.','She\'s afraid of being fire.','She\'s afraid to be fired.'],correct:0,exp:'Nach Präpositionen (z.B. "of") steht Gerund: "being" + Past Participle. Richtig: "She\'s afraid of being fired."'},
+    {q:'Welche Bedeutung hat "do justice" in einem rechtlichen Kontext?',opts:['ein Urteil fällen','Gerechtigkeit widerfahren lassen / gerecht urteilen','eine Geldstrafe verhängen','sich rächen'],correct:1,exp:'"Do justice" = dafür sorgen, dass jemand fair behandelt wird. "I\'m glad to see that justice was done in the end."'},
+    {q:'Welche Konstruktion ist für "have someone do something" KORREKT wenn man eine professionelle Dienstleistung beauftragt?',opts:['have + to + Infinitiv + Objekt','have + Objekt + Past Participle','have + Objekt + Infinitiv (ohne "to")','have + Gerund + Objekt'],correct:2,exp:'Causative "have": have + Objekt + Infinitiv ohne "to". Z.B. "I\'ll have the mechanic check the brakes."'},
+    {q:'Was ist das genaue Gegenteil von "get away with a crime"?',opts:['commit a crime','be found innocent','be caught and receive a sentence','confess to a crime'],correct:2,exp:'"Get away with a crime" = keine Strafe bekommen. Das genaue Gegenteil ist: erwischt werden UND eine Strafe erhalten ("be caught and receive a sentence").'},
+    {q:'Welcher Satz transformiert das Aktiv KORREKT ins Passiv? "They should invite all the guests."',opts:['All the guests should invited be.','All the guests should be invited.','All the guests should been invited.','All the guests should have been inviting.'],correct:1,exp:'Modal + be + PP: "All the guests should be invited." Die Reihenfolge ist: Modalverb + "be" + Past Participle.'},
+    {q:'Welche Nuance unterscheidet "run away" von "get away with"?',opts:['"run away" bedeutet fliehen (physisch), "get away with" bedeutet ohne Strafe davonkommen','"run away" und "get away with" sind synonyme Phrasal Verbs','"get away with" bedeutet fliehen, "run away" bedeutet entkommen','"run away" wird nur für Kinder verwendet, "get away with" für Erwachsene'],correct:0,exp:'"Run away" = physisch flüchten/weglaufen. "Get away with" = ohne Strafe/Konsequenzen davonkommen (nicht unbedingt physisch).'},
+    {q:'Wann ist die Verwendung von "have" im Causative Active NICHT korrekt?',opts:['Wenn man Autorität über die Person hat','Wenn man seinen Chef bittet, einem zu helfen','Wenn Eltern ihre Kinder etwas erledigen lassen','Wenn ein Manager seine Mitarbeiter instruiert'],correct:1,exp:'"Have" im Causative erfordert Autorität. Einen Chef zu bitten impliziert keine Autorität des Sprechers über den Chef — dort wäre "ask" oder "get" richtiger.'}
+  ]
+};
+
+const examQuestions = [
+  {type:'mc',q:'Welche Form bildet das englische Passiv?',opts:['to have + Past Participle','to be + Past Participle','to do + Infinitive','to get + Gerund'],correct:1,exp:'Das Passiv wird mit "to be" + Past Participle gebildet.'},
+  {type:'mc',q:'Was bedeutet "get away with a crime"?',opts:['ein Verbrechen begehen','ein Verbrechen anzeigen','ungestraft davonkommen','ein Verbrechen verhindern'],correct:2,exp:'"Get away with" = ohne Strafe davonkommen.'},
+  {type:'fitb',q:'She enjoys ______ photographed by professional photographers.',blank:'being',exp:'Passiv-Gerund: "being" + Past Participle.'},
+  {type:'mc',q:'Welche Aussage über "have" im Causative ist korrekt?',opts:['"have" + Objekt + to + Infinitiv','Kann von jedem benutzt werden','"have" + Objekt + Infinitiv (ohne "to"), nur mit Autorität','"have" ist identisch mit "get"'],correct:2,exp:'Causative "have": have + O + Infinitiv ohne "to". Nur wenn man Autorität hat.'},
+  {type:'fitb',q:'The report must ______ ______ by tomorrow. (Passive Infinitive)',blank:'be finished',exp:'Modal + be + Past Participle: "must be finished".'},
+  {type:'mc',q:'Was ist die Passivform von: "Alex wants the teacher to praise him."?',opts:['Alex wants the teacher to be praised.','Alex wants to be praised (by the teacher).','Alex wants being praised.','Alex wants praised.'],correct:1,exp:'Nach "want + to" → "to be" + PP. Richtig: "Alex wants to be praised."'},
+  {type:'mc',q:'Welche Präposition folgt auf "accuse someone"?',opts:['for','to','of','about'],correct:2,exp:'"Accuse someone OF a crime" — z.B. He was accused of stealing.'},
+  {type:'fitb',q:'Police arrested the man ______ burglary.',blank:'for',exp:'Arrest someone FOR a crime.'},
+  {type:'mc',q:'Was bedeutet der Ausdruck "change your ways"?',opts:['das Gesetz brechen','seinen Weg wechseln','sein Verhalten/Leben ändern','weglaufen'],correct:2,exp:'"Change your ways" = sein Verhalten und seinen Lebensstil ändern.'},
+  {type:'mc',q:'Was ist der korrekte Causative-Satz mit "get"?',opts:['I\'ll get my friend help me.','I\'ll get my friend to help me.','I\'ll get my friend helped me.','I\'ll get my friend helping me.'],correct:1,exp:'Causative "get": get + Objekt + TO + Infinitiv.'},
+  {type:'mc',q:'Was bedeutet "see through" als Phrasal Verb?',opts:['buchstäblich hindurchsehen','sich um etwas kümmern','etwas/jemanden durchschauen, sich nicht täuschen lassen','etwas bis zum Ende bringen'],correct:2,exp:'"See through" = durchschauen. "It\'s easy to see through fake emails."'},
+  {type:'fitb',q:'He avoids ______ seen in public.',blank:'being',exp:'Passiv-Gerund: "being" + PP. "He avoids being seen."'},
+  {type:'mc',q:'Was bedeutet "keep an eye on"?',opts:['jemanden verhaften','auf jemanden/etwas aufpassen','jemanden beschuldigen','jemanden ignorieren'],correct:1,exp:'"Keep an eye on" = im Auge behalten, auf etwas aufpassen.'},
+  {type:'mc',q:'Was bedeutet "innocent of a crime"?',opts:['schuldig einer Straftat','einer Straftat verdächtig','unschuldig bezüglich einer Straftat','einer Straftat überführt'],correct:2,exp:'"Innocent of a crime" = unschuldig, man hat die Tat nicht begangen.'},
+  {type:'fitb',q:'The man was sentenced ______ three years in prison.',blank:'to',exp:'"Sentence someone TO (prison/years)".'}
+];
+
+const glossaryData = [
+  {term:'accuse',def:'Jemanden für eine Straftat verantwortlich machen oder beschuldigen.',ex:'Emma was accused of stealing the money.',cat:'blue'},
+  {term:'arrest',def:'Eine Person von der Polizei festnehmen und in Gewahrsam nehmen.',ex:'The police arrested two possible criminals.',cat:'blue'},
+  {term:'break the law',def:'Gegen ein Gesetz oder eine Regel verstossen.',ex:'If you break the law, you might go to prison.',cat:'red'},
+  {term:'burglary',def:'Einbruch: das illegale Betreten eines Gebäudes, um zu stehlen.',ex:'There were two burglaries in the town centre last night.',cat:'red'},
+  {term:'case',def:'Eine Angelegenheit, die vor Gericht verhandelt wird.',ex:'The case will be taken to court next month.',cat:'blue'},
+  {term:'commit a crime',def:'Eine Straftat begehen, ein Verbrechen ausführen.',ex:'The politician denied committing a crime.',cat:'red'},
+  {term:'confess',def:'Eine Tat zugeben, gestehen.',ex:'She finally confessed to the robbery.',cat:'amber'},
+  {term:'evidence',def:'Beweise oder Indizien, die eine Tat belegen.',ex:'There is no evidence that I did anything wrong.',cat:'blue'},
+  {term:'find someone guilty',def:'Im Gericht urteilen, dass jemand schuldig ist.',ex:'The judge found the man guilty of the crime.',cat:'amber'},
+  {term:'hold a trial',def:'Einen Gerichtsprozess abhalten.',ex:'The trial will be held next month.',cat:'blue'},
+  {term:'innocent',def:'Unschuldig; man hat keine Straftat begangen.',ex:'I believe that he is innocent and did nothing wrong.',cat:'green'},
+  {term:'investigate',def:'Eine Straftat oder ein Ereignis genauer untersuchen, ermitteln.',ex:'The police are investigating the crime.',cat:'blue'},
+  {term:'jury',def:'Eine Gruppe von Laienrichtern, die in einem Prozess über Schuld oder Unschuld entscheidet.',ex:'The jury will decide whether or not the men are guilty.',cat:'blue'},
+  {term:'pay a fine',def:'Eine Geldstrafe bezahlen.',ex:'If you park here, you might have to pay a fine.',cat:'amber'},
+  {term:'proof',def:'Eindeutiger Beweis, der etwas zweifelsfrei belegt.',ex:'Is there any proof that he committed the crime?',cat:'blue'},
+  {term:'receive a sentence',def:'Ein Strafurteil erhalten.',ex:'The man received a sentence of five years in prison.',cat:'amber'},
+  {term:'scene of the crime',def:'Der Tatort, der Ort, wo ein Verbrechen begangen wurde.',ex:'Police officers are at the scene of the crime.',cat:'blue'},
+  {term:'suspect',def:'Als Verdächtiger gelten oder jemanden verdächtigen.',ex:'There are two suspects and police want to interview them both.',cat:'amber'},
+  {term:'take someone to court',def:'Jemanden gerichtlich belangen, vor Gericht bringen.',ex:'Jeff was taken to court after breaking the law.',cat:'blue'},
+  {term:'get away with',def:'Etwas tun, ohne dafür bestraft zu werden.',ex:'Police never found out who committed the crime — whoever did it managed to get away with it.',cat:'purple'},
+  {term:'see through',def:'Jemanden oder etwas durchschauen; sich nicht täuschen lassen.',ex:'It\'s easy to see through fake emails claiming to be from your own bank.',cat:'purple'},
+  {term:'burn down',def:'Etwas vollständig abbrennen (Gebäude etc.).',ex:'Someone burned down a bus shelter near my street.',cat:'red'},
+  {term:'go off',def:'Losgehen, klingeln (Alarm), explodieren.',ex:'Someone\'s car alarm has just gone off.',cat:'amber'},
+  {term:'run away',def:'Weglaufen, flüchten.',ex:'I heard a burglar alarm and saw someone running away from the bank.',cat:'red'},
+  {term:'see to',def:'Sich um etwas kümmern, etwas erledigen.',ex:'The council need to see to all the street lights that aren\'t working.',cat:'blue'},
+  {term:'change your ways',def:'Sein Verhalten oder seinen Lebensstil grundlegend ändern.',ex:'He promised to change his ways and not commit any more crimes.',cat:'green'},
+  {term:"couldn't care less",def:'Etwas ist einem absolut egal; man hat kein Interesse.',ex:"Some people couldn't care less about dropping rubbish on the street.",cat:'amber'},
+  {term:'do justice',def:'Jemandem oder etwas gerecht werden; Gerechtigkeit walten lassen.',ex:"I'm glad to see that justice was done in the end.",cat:'green'},
+  {term:'give it a go',def:'Etwas ausprobieren, einen Versuch wagen.',ex:"I haven't tried yoga, but I'd like to give it a go.",cat:'green'},
+  {term:'have no choice',def:'Keine andere Option haben, keine Wahl haben.',ex:"I don't want to buy a new laptop, but sadly I have no choice.",cat:'amber'},
+  {term:'keep an eye on',def:'Auf jemanden oder etwas aufpassen, es beobachten.',ex:'Can you keep an eye on my bag while I go to the bathroom?',cat:'blue'},
+  {term:'lose track of time',def:'Die Zeit vergessen, nicht mehr wissen wie spät es ist.',ex:"I often lose track of time when I'm really busy.",cat:'amber'},
+  {term:'make a fool of myself',def:'Sich lächerlich machen, sich blamieren.',ex:"I'm not wearing those clothes — I don't want to make a fool of myself.",cat:'red'},
+  {term:'Passive Voice',def:'Passivform: "to be" + Past Participle. Betont Handlung/Objekt, nicht den Handelnden.',ex:'The car is washed. / The flute was played by Peter.',cat:'purple'},
+  {term:'Causative Active (have)',def:'"have" + Objekt + Infinitiv (ohne "to"): Jemanden mit Autorität etwas tun lassen.',ex:"I'll have my sister help you.",cat:'purple'},
+  {term:'Causative Active (get)',def:'"get" + Objekt + "to" + Infinitiv: Jemanden überreden, etwas zu tun.',ex:'Can you get your friend to talk to me?',cat:'purple'},
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+let crashIndex = 0;
+let crashSeen = new Set([0]);
+let fcIndex = 0;
+let fcFlipped = false;
+let fcKnown = new Set();
+let fcAgain = new Set();
+let fcCards = [...flashcards];
+let matchLeft = null;
+let matchPairs = [];
+let matchData = [];
+let quizDifficulty = 'easy';
+let quizQuestionsList = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizHistory = [];
+let quizAnswered = false;
+let examActive = false;
+let examTimer = null;
+let examTimeLeft = 900;
+let examAnswers = {};
+let examQuestionsList = [];
+let stdChecked = new Set();
+let fullChecked = new Set();
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const breadcrumbs = {
+  landing:'Startseite',crash:'Crash Course',standard:'Standard Summary',
+  full:'Full Summary',quiz:'Quiz',exam:'Prüfungssimulation',
+  flashcards:'Flashcards',matching:'Zuordnung',fitb:'Lückentext',glossary:'Glossar',
+  vocabcards:'Vocab Reference'
+};
+
+function showPage(id, linkEl) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+  if(linkEl) linkEl.classList.add('active');
+  document.getElementById('breadcrumb').textContent = breadcrumbs[id]||id;
+  window.scrollTo(0,0);
+  closeMobileSidebar();
+  if(id==='crash') initCrash();
+  if(id==='standard') initSummary('standard');
+  if(id==='full') initSummary('full');
+  if(id==='quiz') initQuiz();
+  if(id==='exam') initExam();
+  if(id==='flashcards') initFlashcards();
+  if(id==='matching') initMatching();
+  if(id==='fitb') initFitb();
+  if(id==='vocabcards') initVocabCards();
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const btn = document.getElementById('collapseBtn');
+  const main = document.getElementById('mainArea');
+  sb.classList.toggle('collapsed');
+  if(sb.classList.contains('collapsed')){
+    btn.style.left='0';btn.textContent='▶';
+    main.style.marginLeft='0';
+  } else {
+    btn.style.left='var(--sidebar-w)';btn.textContent='◀';
+    main.style.marginLeft='var(--sidebar-w)';
+  }
+}
+function openMobileSidebar(){
+  document.getElementById('sidebar').classList.add('mobile-open');
+  document.getElementById('overlay').classList.add('show');
+}
+function closeMobileSidebar(){
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('overlay').classList.remove('show');
+}
+function toggleDark(){
+  const el=document.documentElement;
+  const isDark=el.getAttribute('data-theme')==='dark';
+  el.setAttribute('data-theme',isDark?'light':'dark');
+  document.querySelector('.dark-toggle').textContent=isDark?'🌙 Dark':'☀️ Hell';
+}
+
+// ============================================================
+// CRASH COURSE
+// ============================================================
+function initCrash(){
+  crashIndex=0; crashSeen=new Set([0]);
+  renderCrash();
+}
+function renderCrash(){
+  const dots=document.getElementById('crashDots');
+  const area=document.getElementById('crashCardArea');
+  const nav=document.getElementById('crashNav');
+  const total=crashCards.length;
+  if(crashIndex>=total){
+    dots.innerHTML='';
+    nav.style.display='none';
+    area.innerHTML=`<div class="crash-card crash-done">
+      <div style="font-size:3rem">🎉</div>
+      <h2>Geschafft!</h2>
+      <p>Du hast alle ${total} Crash Course Karten durchgearbeitet.</p>
+      <div class="crash-done-btns">
+        <button class="btn btn-secondary" onclick="initCrash()">↺ Neustart</button>
+        <button class="btn btn-primary" onclick="showPage('quiz',null)">🧠 Zum Quiz</button>
+      </div>
+    </div>`;
+    confetti();return;
+  }
+  dots.innerHTML=Array.from({length:total},(_,i)=>{
+    let cls='crash-dot';
+    if(i===crashIndex) cls+=' current';
+    else if(i<crashIndex||crashSeen.has(i)) cls+=' done';
+    return `<div class="${cls}" onclick="jumpCrash(${i})"></div>`;
+  }).join('');
+  const c=crashCards[crashIndex];
+  area.innerHTML=`<div class="crash-card">
+    <div class="card-topic">${c.topic}</div>
+    <div class="card-emoji">${c.emoji}</div>
+    <div class="card-title">${c.title}</div>
+    <ul>${c.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+  </div>`;
+  nav.style.display='flex';
+  document.getElementById('crashPrev').disabled=(crashIndex===0);
+  document.getElementById('crashNext').textContent=(crashIndex===total-1)?'Fertig ✓':'Weiter →';
+  document.getElementById('crashCounter').textContent=`${crashIndex+1} / ${total}`;
+}
+function crashNav(dir){
+  crashIndex+=dir;
+  if(crashIndex<0)crashIndex=0;
+  crashSeen.add(crashIndex);
+  renderCrash();
+}
+function jumpCrash(i){crashIndex=i;crashSeen.add(i);renderCrash();}
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('page-crash').classList.contains('active'))return;
+  if(e.key==='ArrowLeft')crashNav(-1);
+  if(e.key==='ArrowRight')crashNav(1);
+});
+
+// ============================================================
+// SUMMARIES
+// ============================================================
+function initSummary(mode){
+  const topics = mode==='standard'?standardTopics:fullTopics;
+  const checked = mode==='standard'?stdChecked:fullChecked;
+  const container = document.getElementById(mode+'Content');
+  const progressFill = document.getElementById(mode+'Progress');
+  const progressPct = document.getElementById(mode+'ProgressPct');
+  function updateProgress(){
+    const pct=Math.round(checked.size/topics.length*100);
+    progressFill.style.width=pct+'%';
+    progressPct.textContent=pct+'%';
+  }
+  let sections={};
+  topics.forEach((t,i)=>{
+    if(!sections[t.section])sections[t.section]=[];
+    sections[t.section].push({...t,idx:i});
+  });
+  let html='';
+  for(const [sec,items] of Object.entries(sections)){
+    html+=`<div class="summary-section"><div class="summary-section-title">${sec}</div>`;
+    items.forEach(t=>{
+      const isOpen=false;
+      const isChecked=checked.has(t.idx);
+      html+=`<div class="topic-card${isOpen?' open':''}" id="${mode}-card-${t.idx}">
+        <div class="topic-card-header" onclick="toggleCard('${mode}',${t.idx})">
+          <span style="font-size:1.2rem">${t.emoji}</span>
+          <span class="topic-card-title">${t.title}</span>
+          <div class="topic-card-check${isChecked?' checked':''}" onclick="event.stopPropagation();toggleCheck('${mode}',${t.idx})" title="Als erledigt markieren">${isChecked?'✓':''}</div>
+          <span class="topic-card-toggle">▼</span>
+        </div>
+        <div class="topic-card-body">${t.body}</div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+  container.innerHTML=html;
+  updateProgress();
+  window._updateProgress = {[mode]:updateProgress,...(window._updateProgress||{})};
+}
+function toggleCard(mode,idx){
+  document.getElementById(mode+'-card-'+idx).classList.toggle('open');
+}
+function toggleCheck(mode,idx){
+  const checked=mode==='standard'?stdChecked:fullChecked;
+  const el=document.getElementById(mode+'-card-'+idx).querySelector('.topic-card-check');
+  if(checked.has(idx)){checked.delete(idx);el.classList.remove('checked');el.textContent='';}
+  else{checked.add(idx);el.classList.add('checked');el.textContent='✓';}
+  if(window._updateProgress&&window._updateProgress[mode])window._updateProgress[mode]();
+}
+
+// ============================================================
+// FLASHCARDS
+// ============================================================
+function initFlashcards(){
+  fcIndex=0;fcFlipped=false;fcKnown=new Set();fcAgain=new Set();
+  fcCards=[...flashcards];
+  renderFC();
+}
+function renderFC(){
+  const area=document.getElementById('fcArea');
+  if(fcCards.length===0){
+    const total=flashcards.length;
+    area.innerHTML=`<div style="text-align:center;padding:40px">
+      <div style="font-size:2.5rem">✅</div>
+      <h2 style="font-family:var(--font-head);margin:12px 0 6px">Alle Karten durch!</h2>
+      <p style="color:var(--text2);margin-bottom:20px">Bekannt: ${fcKnown.size} | Nochmals: ${fcAgain.size}</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="initFlashcards()">↺ Alle neu</button>
+        ${fcAgain.size>0?`<button class="btn btn-primary" onclick="repeatUnknown()">🔁 Unbekannte wiederholen</button>`:''}
+      </div>
+    </div>`;
+    if(fcKnown.size===total)confetti();
+    return;
+  }
+  const c=fcCards[fcIndex];
+  const tagColors={Crime:'blue',Grammar:'purple',Expression:'amber','Phrasal Verb':'green',Preposition:'red'};
+  const tc=tagColors[c.tag]||'blue';
+  area.innerHTML=`
+    <div class="fc-controls">
+      <button class="btn btn-secondary btn-sm" onclick="shuffleFC()">🔀 Mischen</button>
+      <div class="fc-stats">${fcIndex+1}/${fcCards.length} · ✅ ${fcKnown.size} · 🔁 ${fcAgain.size}</div>
+    </div>
+    <div class="fc-arena">
+      <div class="flashcard-wrap" onclick="flipFC()">
+        <div class="flashcard${fcFlipped?' flipped':''}" id="fcCard">
+          <div class="fc-face front">
+            <div class="fc-tag"><span class="tag ${tc}">${c.tag}</span></div>
+            <div class="fc-word">${c.word}</div>
+            <div class="fc-hint">${c.hint}</div>
+            <div class="fc-flip-hint">Klicken zum Umdrehen</div>
+          </div>
+          <div class="fc-face back">
+            <div class="fc-tag"><span class="tag ${tc}">${c.tag}</span></div>
+            <div class="fc-word" style="font-size:1rem;margin-bottom:8px">${c.word}</div>
+            <div class="fc-def">${c.def}</div>
+            ${c.ex?`<div class="fc-hint" style="margin-top:10px">${c.ex}</div>`:''}
+          </div>
+        </div>
+      </div>
+    </div>
+    ${fcFlipped?`<div class="fc-rate-btns mt8">
+      <button class="btn btn-secondary" onclick="rateFC('again')">🔁 Nochmals</button>
+      <button class="btn btn-primary" onclick="rateFC('known')">✅ Weiss ich</button>
+    </div>`:''}
+    <div class="fc-dot-row mt16">${fcCards.map((_,i)=>`<div class="fc-dot${fcKnown.has(i)?'known':''} ${fcAgain.has(i)?'again':''}"></div>`).join('')}</div>
+  `;
+}
+function flipFC(){fcFlipped=!fcFlipped;renderFC();}
+function rateFC(r){
+  if(r==='known'){fcKnown.add(fcIndex);fcCards.splice(fcIndex,1);}
+  else{fcAgain.add(fcIndex);fcIndex=(fcIndex+1)%fcCards.length;}
+  fcFlipped=false;
+  if(fcCards.length>0&&fcIndex>=fcCards.length)fcIndex=0;
+  renderFC();
+}
+function shuffleFC(){shuffle(fcCards);fcIndex=0;fcFlipped=false;renderFC();}
+function repeatUnknown(){
+  fcCards=flashcards.filter((_,i)=>fcAgain.has(i));
+  fcIndex=0;fcFlipped=false;fcKnown=new Set();fcAgain=new Set();
+  renderFC();
+}
+
+// ============================================================
+// MATCHING
+// ============================================================
+function initMatching(){
+  matchPairs=[];matchLeft=null;
+  matchData=shuffle([...matchingPairs]).map((p,i)=>({...p,id:i,matched:false}));
+  const area=document.getElementById('matchArea');
+  renderMatching();
+}
+function renderMatching(){
+  const area=document.getElementById('matchArea');
+  const unmatched=matchData.filter(p=>!p.matched);
+  const leftItems=shuffle(unmatched.map(p=>({...p})));
+  const rightItems=shuffle(unmatched.map(p=>({...p})));
+  let pairListHTML=matchPairs.map(p=>`
+    <div class="match-pair" id="mpair-${p.id}">
+      <span class="mp-left">${p.left}</span>
+      <span class="mp-arrow">→</span>
+      <span class="mp-right">${p.right}</span>
+      <button class="mp-remove" onclick="removeMatchPair(${p.id})" title="Entfernen">✕</button>
+    </div>`).join('');
+  area.innerHTML=`
+    ${matchPairs.length>0?`<div><div style="font-size:.8rem;color:var(--text3);margin-bottom:6px">Zugeordnet:</div><div class="match-pair-list" id="matchPairList">${pairListHTML}</div></div>`:''}
+    <div class="match-columns">
+      <div>
+        <div class="match-col-title">Ausdruck / Wort</div>
+        ${leftItems.map(p=>`<div class="match-item${matchLeft&&matchLeft.id===p.id?' selected':''}" onclick="selectMatchLeft(${p.id})" data-id="${p.id}">${p.left}</div>`).join('')}
+      </div>
+      <div>
+        <div class="match-col-title">Bedeutung / Definition</div>
+        ${rightItems.map(p=>`<div class="match-item" onclick="selectMatchRight(${p.id})" data-id="${p.id}">${p.right}</div>`).join('')}
+      </div>
+    </div>
+    <div id="matchMsg" class="match-result-msg" style="display:none"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" onclick="initMatching()">↺ Zurücksetzen</button>
+      ${matchPairs.length===matchingPairs.length?`<button class="btn btn-primary btn-sm" onclick="checkAllMatch()">✓ Alle prüfen</button>`:''}
+    </div>
+  `;
+}
+function selectMatchLeft(id){
+  matchLeft=matchData.find(p=>p.id===id);
+  renderMatching();
+}
+function selectMatchRight(id){
+  if(!matchLeft){
+    const msg=document.getElementById('matchMsg');
+    if(msg){msg.style.display='block';msg.style.background='var(--amber-bg)';msg.textContent='Bitte zuerst einen Begriff links auswählen!';}
+    return;
+  }
+  if(matchLeft.id===id){
+    matchData.find(p=>p.id===id).matched=true;
+    matchPairs.push(matchData.find(p=>p.id===id));
+    matchLeft=null;
+    if(matchPairs.length===matchingPairs.length){renderMatching();setTimeout(()=>confetti(),200);}
+    else renderMatching();
+  } else {
+    const msg=document.createElement('div');
+    const area=document.getElementById('matchArea');
+    const existing=document.getElementById('matchMsg');
+    if(existing){existing.style.display='block';existing.style.background='var(--red-bg)';existing.style.color='var(--red)';existing.textContent='❌ Nicht korrekt. Versuche es erneut!';}
+    setTimeout(()=>{if(document.getElementById('matchMsg')){document.getElementById('matchMsg').style.display='none';}},1500);
+    matchLeft=null;renderMatching();
+  }
+}
+function removeMatchPair(id){
+  matchData.find(p=>p.id===id).matched=false;
+  matchPairs=matchPairs.filter(p=>p.id!==id);
+  renderMatching();
+}
+function checkAllMatch(){
+  if(matchPairs.length===matchingPairs.length){
+    document.getElementById('matchMsg').style.display='block';
+    document.getElementById('matchMsg').style.background='var(--green-bg)';
+    document.getElementById('matchMsg').style.color='var(--green)';
+    document.getElementById('matchMsg').textContent='🎉 Alle Paare korrekt zugeordnet!';
+    confetti();
+  }
+}
+
+// ============================================================
+// FILL IN THE BLANK
+// ============================================================
+function initFitb(){
+  const area=document.getElementById('fitbArea');
+  let html=fitbSentences.map((s,i)=>`
+    <div class="fitb-sentence" id="fitb-${i}">
+      <span style="font-size:.75rem;color:var(--text3);font-family:var(--font-mono);margin-right:6px">${i+1}.</span>
+      ${s.pre}<input class="fitb-input" id="fitb-input-${i}" placeholder="..." style="width:${Math.max(80,s.blank.length*11)}px" autocomplete="off" spellcheck="false"><span class="fitb-feedback" id="fitb-fb-${i}"></span>${s.post}
+      <div style="font-size:.72rem;color:var(--text3);margin-top:4px">💡 Hinweis: ${s.hint}</div>
+    </div>`).join('');
+  html+=`<div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+    <button class="btn btn-primary" id="fitb-check-btn">✓ Prüfen</button>
+    <button class="btn btn-secondary" onclick="showFitbAnswers()">👁 Antworten zeigen</button>
+    <button class="btn btn-secondary" onclick="initFitb()">↺ Zurücksetzen</button>
+  </div>
+  <div id="fitb-result" style="margin-top:12px"></div>`;
+  area.innerHTML=html;
+  document.getElementById('fitb-check-btn').addEventListener('click',checkFitb);
+}
+function checkFitb(){
+  let correct=0;
+  fitbSentences.forEach((s,i)=>{
+    const inp=document.getElementById('fitb-input-'+i);
+    const fb=document.getElementById('fitb-fb-'+i);
+    if(!inp)return;
+    const val=inp.value.trim().toLowerCase();
+    const ans=s.blank.toLowerCase();
+    inp.classList.remove('correct','wrong');
+    if(val===ans){inp.classList.add('correct');fb.className='fitb-feedback correct';fb.textContent=' ✓';correct++;}
+    else{inp.classList.add('wrong');fb.className='fitb-feedback wrong';fb.textContent=' ✗';}
+  });
+  const res=document.getElementById('fitb-result');
+  const pct=Math.round(correct/fitbSentences.length*100);
+  res.innerHTML=`<div class="info-box ${pct===100?'green':pct>=60?'amber':'red'}">${correct}/${fitbSentences.length} richtig (${pct}%) ${pct===100?'🎉 Perfekt!':''}</div>`;
+  if(pct===100)confetti();
+}
+function showFitbAnswers(){
+  fitbSentences.forEach((s,i)=>{
+    const inp=document.getElementById('fitb-input-'+i);
+    const fb=document.getElementById('fitb-fb-'+i);
+    if(!inp)return;
+    inp.value=s.blank;
+    inp.classList.add('correct');
+    if(fb){fb.className='fitb-feedback correct';fb.textContent=' (Lösung)';}
+  });
+}
+
+// ============================================================
+// QUIZ
+// ============================================================
+function initQuiz(){
+  const area=document.getElementById('quizArea');
+  area.innerHTML=`
+    <div class="quiz-header">
+      <div>
+        <span style="font-size:.82rem;color:var(--text2);margin-right:8px">Schwierigkeitsstufe:</span>
+        <div class="difficulty-btns">
+          <button class="diff-btn easy${quizDifficulty==='easy'?' active':''}" onclick="setQuizDiff('easy')">Leicht (~4.0)</button>
+          <button class="diff-btn medium${quizDifficulty==='medium'?' active':''}" onclick="setQuizDiff('medium')">Mittel (~5.0)</button>
+          <button class="diff-btn hard${quizDifficulty==='hard'?' active':''}" onclick="setQuizDiff('hard')">Schwer (~6.0)</button>
+        </div>
+      </div>
+    </div>
+    <div id="quizInner"></div>
+    <div class="quiz-history" id="quizHistory"></div>
+  `;
+  startQuiz();
+}
+function setQuizDiff(d){
+  quizDifficulty=d;
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.diff-btn.'+d).classList.add('active');
+  startQuiz();
+}
+function startQuiz(){
+  const qs=shuffle([...quizQuestions[quizDifficulty]]).slice(0,10);
+  quizQuestionsList=qs.map(q=>({
+    ...q,
+    shuffled:shuffleOptions(q.opts,q.correct)
+  }));
+  quizIndex=0;quizScore=0;quizAnswered=false;
+  renderQuizQuestion();
+  renderQuizHistory();
+}
+function shuffleOptions(opts,correctIdx){
+  const pairs=opts.map((o,i)=>({text:o,isCorrect:i===correctIdx}));
+  const shuffled=shuffle(pairs);
+  return {opts:shuffled.map(p=>p.text),correct:shuffled.findIndex(p=>p.isCorrect)};
+}
+function renderQuizQuestion(){
+  const inner=document.getElementById('quizInner');
+  if(quizIndex>=quizQuestionsList.length){
+    const pct=Math.round(quizScore/quizQuestionsList.length*100);
+    const grade=calcGrade(pct);
+    inner.innerHTML=`<div class="quiz-results">
+      <div class="score-big">${quizScore}/${quizQuestionsList.length}</div>
+      <div class="grade">Geschätzte Note: <strong>${grade}</strong></div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+      <button class="btn btn-primary mt16" onclick="startQuiz()">↺ Neuer Versuch</button>
+    </div>`;
+    quizHistory.unshift({diff:quizDifficulty,score:quizScore,total:quizQuestionsList.length,grade});
+    renderQuizHistory();
+    if(pct===100)confetti();
+    return;
+  }
+  const q=quizQuestionsList[quizIndex];
+  const pct=Math.round(quizIndex/quizQuestionsList.length*100);
+  inner.innerHTML=`
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+    <div class="quiz-card">
+      <div class="quiz-qnum">Frage ${quizIndex+1} von ${quizQuestionsList.length}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options" id="quizOpts">
+        ${q.shuffled.opts.map((o,i)=>`<button class="quiz-option" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}
+      </div>
+      <div class="quiz-explanation" id="quizExp">💡 ${q.exp}</div>
+    </div>
+    <div id="quizNextWrap"></div>
+  `;
+}
+function answerQuiz(idx){
+  if(quizAnswered)return;
+  quizAnswered=true;
+  const q=quizQuestionsList[quizIndex];
+  const opts=document.querySelectorAll('.quiz-option');
+  opts.forEach((btn,i)=>{
+    btn.disabled=true;
+    if(i===q.shuffled.correct)btn.classList.add('correct');
+    else if(i===idx)btn.classList.add('wrong');
+  });
+  if(idx===q.shuffled.correct)quizScore++;
+  document.getElementById('quizExp').classList.add('show');
+  document.getElementById('quizNextWrap').innerHTML=`<button class="btn btn-primary mt8" onclick="nextQuiz()">Weiter →</button>`;
+}
+function nextQuiz(){quizAnswered=false;quizIndex++;renderQuizQuestion();}
+function renderQuizHistory(){
+  const el=document.getElementById('quizHistory');
+  if(!el||quizHistory.length===0)return;
+  el.innerHTML=`<h4>Letzte Versuche</h4>${quizHistory.slice(0,5).map(h=>`
+    <div class="history-item">
+      <span class="tag ${h.diff==='easy'?'green':h.diff==='medium'?'amber':'red'}">${h.diff}</span>
+      <span>${h.score}/${h.total}</span>
+      <span>Note: ${h.grade}</span>
+    </div>`).join('')}`;
+}
+function calcGrade(pct){
+  if(pct>=95)return'6.0';if(pct>=85)return'5.5';if(pct>=75)return'5.0';
+  if(pct>=65)return'4.5';if(pct>=55)return'4.0';if(pct>=45)return'3.5';
+  if(pct>=35)return'3.0';return'2.0';
+}
+
+// ============================================================
+// EXAM
+// ============================================================
+function initExam(){
+  clearInterval(examTimer);
+  const area=document.getElementById('examArea');
+  area.innerHTML=`<div class="exam-intro">
+    <p style="color:var(--text2);margin-bottom:20px;line-height:1.7">
+      Diese Simulation umfasst <strong>15 Fragen</strong> aus allen Themenbereichen und Schwierigkeitsstufen.<br>
+      Du hast <strong>15 Minuten</strong> Zeit. Während der Prüfung gibt es kein Feedback — erst am Ende.
+    </p>
+    <div class="info-box amber">⏱ Timer startet beim ersten Klick auf "Prüfung starten".</div>
+    <button class="btn btn-primary mt16" onclick="startExam()">📝 Prüfung starten</button>
+  </div>`;
+}
+function startExam(){
+  examAnswers={};examTimeLeft=900;
+  examQuestionsList=shuffle([...examQuestions]);
+  renderExam();
+  examTimer=setInterval(()=>{
+    examTimeLeft--;
+    const t=document.getElementById('examTimerEl');
+    if(t){
+      const m=Math.floor(examTimeLeft/60);const s=examTimeLeft%60;
+      t.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+      if(examTimeLeft<=120)t.classList.add('urgent');
+    }
+    if(examTimeLeft<=0){clearInterval(examTimer);showExamResults();}
+  },1000);
+}
+function renderExam(){
+  const area=document.getElementById('examArea');
+  let qhtml=examQuestionsList.map((q,i)=>{
+    if(q.type==='mc'){
+      const sh=shuffleOptions(q.opts,q.correct);
+      examQuestionsList[i]._shuffled=sh;
+      return `<div class="exam-question">
+        <div class="exam-q-label">Frage ${i+1} · Multiple Choice</div>
+        <div class="quiz-question">${q.q}</div>
+        <div class="quiz-options">
+          ${sh.opts.map((o,j)=>`<button class="quiz-option" id="eq-${i}-${j}" onclick="selectExamAnswer(${i},${j},this)">${String.fromCharCode(65+j)}) ${o}</button>`).join('')}
+        </div>
+      </div>`;
+    } else {
+      return `<div class="exam-question">
+        <div class="exam-q-label">Frage ${i+1} · Lückentext</div>
+        <div class="quiz-question">${q.q.replace('______',`<input class="fitb-input" id="exam-fitb-${i}" placeholder="..." style="width:120px" autocomplete="off">`)}</div>
+      </div>`;
+    }
+  }).join('');
+  area.innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+      <span id="examTimerEl" class="exam-timer">15:00</span>
+      <button class="btn btn-primary btn-sm" onclick="showExamResults()">✓ Abgeben</button>
+    </div>
+    ${qhtml}
+    <button class="btn btn-primary" onclick="showExamResults()" style="margin-top:12px">✓ Prüfung abgeben</button>
+  `;
+  // Attach FITB listeners via JS (not inline) - BUG FIX
+  examQuestionsList.forEach((q,i)=>{
+    if(q.type==='fitb'){
+      const inp=document.getElementById('exam-fitb-'+i);
+      if(inp)inp.addEventListener('input',function(){examAnswers['fitb-'+i]=this.value.trim();});
+    }
+  });
+}
+function selectExamAnswer(qi,opt,btn){
+  document.querySelectorAll(`[id^="eq-${qi}-"]`).forEach(b=>b.style.background='');
+  btn.style.background='var(--blue-bg)';btn.style.borderColor='var(--blue)';
+  examAnswers[qi]=opt;
+}
+function showExamResults(){
+  clearInterval(examTimer);
+  // Collect FITB answers from DOM
+  examQuestionsList.forEach((q,i)=>{
+    if(q.type==='fitb'){
+      const inp=document.getElementById('exam-fitb-'+i);
+      if(inp)examAnswers['fitb-'+i]=inp.value.trim();
+    }
+  });
+  let correct=0;
+  const corrections=examQuestionsList.map((q,i)=>{
+    let isCorrect=false;let userAns='';let correctAns='';
+    if(q.type==='mc'){
+      const sh=q._shuffled||shuffleOptions(q.opts,q.correct);
+      const userIdx=examAnswers[i];
+      isCorrect=(userIdx===sh.correct);
+      userAns=userIdx!==undefined?sh.opts[userIdx]:'(keine Antwort)';
+      correctAns=sh.opts[sh.correct];
+    } else {
+      const val=(examAnswers['fitb-'+i]||'').toLowerCase();
+      isCorrect=val===q.blank.toLowerCase();
+      userAns=examAnswers['fitb-'+i]||'(keine Antwort)';
+      correctAns=q.blank;
+    }
+    if(isCorrect)correct++;
+    return {q,isCorrect,userAns,correctAns,i};
+  });
+  const pct=Math.round(correct/examQuestionsList.length*100);
+  const grade=calcGrade(pct);
+  const area=document.getElementById('examArea');
+  area.innerHTML=`<div class="exam-results-wrap">
+    <h2>📋 Prüfungsergebnis</h2>
+    <div class="exam-score-strip">
+      <div class="exam-score-item"><div class="esn">${correct}/${examQuestionsList.length}</div><div class="esl">Richtige Antworten</div></div>
+      <div class="exam-score-item"><div class="esn">${pct}%</div><div class="esl">Prozent</div></div>
+      <div class="exam-score-item"><div class="esn">${grade}</div><div class="esl">Geschätzte Note</div></div>
+    </div>
+    <button class="btn btn-secondary btn-sm mb12" onclick="initExam()">↺ Neue Prüfung</button>
+    <div class="exam-correction">
+      <h3 style="font-family:var(--font-head);margin-bottom:12px">Korrekturen</h3>
+      ${corrections.map(c=>`<div class="exam-q-result ${c.isCorrect?'eq-correct':'eq-wrong'}">
+        <div class="eq-header">
+          <span class="eq-icon">${c.isCorrect?'✅':'❌'}</span>
+          <span class="eq-q">Frage ${c.i+1}: ${c.q.q.replace(/<[^>]+>/g,'').substring(0,80)}...</span>
+        </div>
+        <div class="eq-detail">
+          ${!c.isCorrect?`<strong>Deine Antwort:</strong> ${c.userAns}<br>`:''}
+          <strong>Richtige Antwort:</strong> ${c.correctAns}<br>
+          <span style="color:var(--text3)">💡 ${c.q.exp}</span>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+  if(pct===100)confetti();
+}
+
+// ============================================================
+// GLOSSARY
+// ============================================================
+function initGlossary(){renderGlossary('');}
+function renderGlossary(filter){
+  const grid=document.getElementById('glossaryGrid');
+  const f=filter.toLowerCase();
+  const filtered=glossaryData.filter(g=>
+    g.term.toLowerCase().includes(f)||g.def.toLowerCase().includes(f)||g.ex.toLowerCase().includes(f)
+  );
+  grid.innerHTML=filtered.map(g=>`<div class="glossary-card">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <span class="g-term">${g.term}</span>
+      <span class="tag ${g.cat}">${g.cat==='blue'?'Vocab':g.cat==='red'?'Crime':g.cat==='amber'?'Law':g.cat==='green'?'Expression':g.cat==='purple'?'Grammatik':'Vocab'}</span>
+    </div>
+    <div class="g-def">${g.def}</div>
+    <div class="g-example">"${g.ex}"</div>
+  </div>`).join('')||'<p style="color:var(--text3);grid-column:1/-1">Keine Einträge gefunden.</p>';
+}
+function filterGlossary(val){renderGlossary(val);}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];
+  }return arr;
+}
+
+function confetti(){
+  const wrap=document.getElementById('confettiWrap');
+  wrap.innerHTML='';
+  const colors=['#4a7c59','#c87941','#2c6fad','#7c5cbf','#c0392b','#f5d76e'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};
+    width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>0.5?'50%':'2px'};
+    animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.5}s;`;
+    wrap.appendChild(el);
+  }
+  setTimeout(()=>wrap.innerHTML='',3500);
+}
+
+// ============================================================
+// VOCAB REFERENCE FLASHCARDS
+// ============================================================
+const vocabCards = [
+  // CRIME
+  {cat:'Crime', en:'accuse', de:'beschuldigen / anklagen', ex:'Emma was accused of stealing the money.'},
+  {cat:'Crime', en:'arrest', de:'verhaften / festnehmen', ex:'The police arrested two possible criminals.'},
+  {cat:'Crime', en:'break the law', de:'das Gesetz brechen', ex:'If you break the law, you might go to prison.'},
+  {cat:'Crime', en:'burglary', de:'Einbruchsdiebstahl', ex:'There were two burglaries in the town centre last night.'},
+  {cat:'Crime', en:'case', de:'Fall / Rechtssache', ex:'The case will be taken to court next month.'},
+  {cat:'Crime', en:'commit a crime', de:'ein Verbrechen begehen', ex:'The politician denied committing a crime.'},
+  {cat:'Crime', en:'confess', de:'gestehen / beichten', ex:'She finally confessed to the robbery.'},
+  {cat:'Crime', en:'evidence', de:'Beweise / Belege', ex:'There is no evidence that I did anything wrong.'},
+  {cat:'Crime', en:'find someone guilty', de:'jemanden schuldig sprechen', ex:'The judge found the man guilty of the crime.'},
+  {cat:'Crime', en:'hold a trial', de:'einen Prozess führen', ex:'The trial will be held next month.'},
+  {cat:'Crime', en:'innocent', de:'unschuldig', ex:'I believe that he is innocent and did nothing wrong.'},
+  {cat:'Crime', en:'investigate', de:'ermitteln / untersuchen', ex:'The police are investigating the crime.'},
+  {cat:'Crime', en:'jury', de:'Geschworene / Jury', ex:'The jury will decide whether or not the men are guilty.'},
+  {cat:'Crime', en:'pay a fine', de:'eine Geldstrafe zahlen', ex:'If you park here, you might have to pay a fine.'},
+  {cat:'Crime', en:'proof', de:'Beweis / Nachweis', ex:'Is there any proof that he committed the crime?'},
+  {cat:'Crime', en:'receive a sentence', de:'ein Urteil / eine Strafe erhalten', ex:'The man received a sentence of five years in prison.'},
+  {cat:'Crime', en:'scene of the crime', de:'der Tatort', ex:'Police officers are at the scene of the crime, looking for anything that might help.'},
+  {cat:'Crime', en:'suspect', de:'verdächtigen / der Verdächtige', ex:'There are two suspects and police want to interview them both.'},
+  {cat:'Crime', en:'take someone to court', de:'jemanden vor Gericht bringen / verklagen', ex:'Jeff was taken to court after breaking the law.'},
+  // PREPOSITIONS
+  {cat:'Prepositions', en:'accuse someone of a crime', de:'jemanden einer Sache beschuldigen (of = wegen)', ex:'He was accused of a crime he did not commit.'},
+  {cat:'Prepositions', en:'arrest someone for a crime', de:'jemanden wegen einer Tat verhaften', ex:'Police arrested the man for burglary.'},
+  {cat:'Prepositions', en:'be against the law', de:'gegen das Gesetz verstoßen / illegal sein', ex:'Driving over the speed limit is against the law.'},
+  {cat:'Prepositions', en:'be innocent of a crime', de:'einer Tat unschuldig sein', ex:'In court, the man claimed to be innocent of stealing the car.'},
+  {cat:'Prepositions', en:'confess to a crime', de:'eine Tat gestehen (to = zu)', ex:'In the end, the man confessed to damaging his neighbour\'s property.'},
+  {cat:'Prepositions', en:'find someone guilty of a crime', de:'jemanden einer Sache schuldig sprechen', ex:'The jury found the teenagers guilty of vandalism.'},
+  {cat:'Prepositions', en:'sentence someone to (prison)', de:'jemanden zu (Gefängnis/Jahren) verurteilen', ex:'The man was sentenced to three years in prison.'},
+  {cat:'Prepositions', en:'suspect someone of doing a crime', de:'jemanden einer Tat verdächtigen', ex:'So far, the police do not suspect the boys of stealing the money.'},
+  // PHRASAL VERBS
+  {cat:'Phrasal Verbs', en:'burn down', de:'abbrennen / niederbrennen', ex:'Someone burned down a bus shelter near my street.'},
+  {cat:'Phrasal Verbs', en:'get away with', de:'ungestraft davonkommen', ex:'Police never found out who committed the crime — whoever did it managed to get away with it.'},
+  {cat:'Phrasal Verbs', en:'go off', de:'losgehen (Alarm) / explodieren', ex:'Someone\'s car alarm has just gone off.'},
+  {cat:'Phrasal Verbs', en:'run away', de:'weglaufen / fliehen', ex:'I heard a burglar alarm and saw someone running away from the bank.'},
+  {cat:'Phrasal Verbs', en:'see through', de:'durchschauen / sich nicht täuschen lassen', ex:'It\'s easy to see through fake emails claiming to be from your own bank.'},
+  {cat:'Phrasal Verbs', en:'see to', de:'sich kümmern um / erledigen', ex:'The council need to see to all the street lights that aren\'t working.'},
+  // EXPRESSIONS
+  {cat:'Expressions', en:'change your ways', de:'sein Verhalten / seinen Lebensstil ändern', ex:'He promised to change his ways and not commit any more crimes.'},
+  {cat:'Expressions', en:'couldn\'t care less', de:'es ist einem völlig egal', ex:'Some people couldn\'t care less about dropping rubbish on the street.'},
+  {cat:'Expressions', en:'do justice', de:'Gerechtigkeit widerfahren lassen / gerecht urteilen', ex:'I\'m glad to see that justice was done in the end.'},
+  {cat:'Expressions', en:'give it a go', de:'etwas ausprobieren / versuchen', ex:'I haven\'t tried yoga, but I\'d like to give it a go.'},
+  {cat:'Expressions', en:'have no choice', de:'keine Wahl haben', ex:'I don\'t want to buy a new laptop, but sadly I have no choice.'},
+  {cat:'Expressions', en:'keep an eye on', de:'ein Auge haben auf / aufpassen auf', ex:'Can you keep an eye on my bag while I go to the bathroom?'},
+  {cat:'Expressions', en:'lose track of time', de:'die Zeit vergessen / das Zeitgefühl verlieren', ex:'I often lose track of time when I\'m really busy.'},
+  {cat:'Expressions', en:'make a fool of myself', de:'sich blamieren / sich lächerlich machen', ex:'I\'m not wearing those clothes — I don\'t want to make a fool of myself.'}
+];
+
+let vcFiltered = [...vocabCards];
+let vcIdx = 0;
+
+function vcFilter(cat) {
+  vcFiltered = cat === 'all' ? [...vocabCards] : vocabCards.filter(c => c.cat === cat);
+  vcIdx = 0;
+  vcRender();
+}
+
+function vcNav(dir) {
+  vcIdx = Math.max(0, Math.min(vcFiltered.length - 1, vcIdx + dir));
+  document.getElementById('vcCard').classList.remove('flipped');
+  setTimeout(vcRender, 50);
+}
+
+function vcFlip() {
+  document.getElementById('vcCard').classList.toggle('flipped');
+}
+
+function vcRender() {
+  const c = vcFiltered[vcIdx];
+  if (!c) return;
+  document.getElementById('vcTag').textContent = c.cat;
+  document.getElementById('vcTagB').textContent = c.cat;
+  document.getElementById('vcWord').textContent = c.en;
+  document.getElementById('vcHint').textContent = 'Auf Deutsch?';
+  document.getElementById('vcDE').textContent = '🇩🇪 ' + c.de;
+  document.getElementById('vcEx').textContent = '📘 ' + c.ex;
+  document.getElementById('vcCounter').textContent = `${vcIdx + 1} / ${vcFiltered.length}`;
+  const dots = document.getElementById('vcDots');
+  dots.innerHTML = vcFiltered.map((_, i) => `<div class="fc-dot${i === vcIdx ? ' current' : ''}"></div>`).join('');
+  document.getElementById('vcStats').textContent = `${vcFiltered.length} Karten`;
+}
+
+function initVocabCards() {
+  vcFiltered = [...vocabCards];
+  vcIdx = 0;
+  vcRender();
+}
+
+// ============================================================
+// BACK TO TOP
+
+window.addEventListener('scroll',()=>{
+  const btn=document.getElementById('backTop');
+  btn.classList.toggle('show',window.scrollY>400);
+});
+
+// DARK MODE KEYBOARD SHORTCUT
+document.addEventListener('keydown',e=>{
+  if(e.key.toLowerCase()==='d'&&!e.ctrlKey&&!e.metaKey&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){
+    toggleDark();
+  }
+});
+
+// INIT
+initGlossary();
+</script>
+</body>
+</html>
